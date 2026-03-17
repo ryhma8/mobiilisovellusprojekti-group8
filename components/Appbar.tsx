@@ -3,6 +3,7 @@ import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { Dropdown } from 'react-native-element-dropdown';
 import { Dimensions, View, StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { horizontalScale } from '../mathFunctions/functions';
 
 
 type Props = NativeStackHeaderProps
@@ -11,6 +12,7 @@ const { width, height } = Dimensions.get("window");
 const sivut = [
     { label: 'Koti', value: 'Koti' },
     { label: 'Juoksu', value: 'Juoksu' },
+    { label: 'Profliili', value: 'Profiili' },
   ];
 
 export function CustomNavigationBar({navigation, route, options, back }: Props) 
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   text:
   {
     margin: 5,
-    fontSize: 20
+    fontSize: horizontalScale(16) // stackista lainattu funktio responsiviiselle fonttikoolle
   },
   list:
   {

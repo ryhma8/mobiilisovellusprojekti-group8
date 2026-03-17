@@ -2,4 +2,5 @@ export type RootStackParamList = //t채채ll채 m채채ritell채채n, mit채 parametrej�
 {
 Koti: undefined
 Juoksu: undefined
+Profiili: undefined
 };

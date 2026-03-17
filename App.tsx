@@ -1,13 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { RootStackParamList } from './types/navigation';
 import { CustomNavigationBar } from './components/Appbar';
 import { Koti } from './screens/Koti';
 import { Juoksu } from './screens/Juoksu';
+import { Profiili } from './screens/Profiili';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+export const { width, height } = Dimensions.get("window");
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
@@ -22,6 +24,7 @@ export default function App() {
         }}>
         <Stack.Screen name="Koti" component={Koti} />
         <Stack.Screen name="Juoksu" component={Juoksu} />
+        <Stack.Screen name="Profiili" component={Profiili} />
       </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>

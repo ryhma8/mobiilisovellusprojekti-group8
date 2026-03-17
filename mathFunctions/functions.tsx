@@ -1,3 +1,6 @@
+import { width, height } from '../App';
+
+const GuidelineBaseWidth = 390;
 
 export function laskeAvgNopeus(t0: number, t1:number, x0: number, x1:number):number // yksiköt ovat sekunteja ja metrejä
 {
@@ -42,3 +45,13 @@ export function laskeJuoksujenAvgMatka(juoksut:number[]):number // ottaa paramet
         }
         return Number(avgMatkaKilometrit.toFixed(2)) //palautetaan matka kilometreinä
 }
+
+
+const horizontalScale = (size:number, floor = true, setMax = false) => 
+{
+    let result = width / GuidelineBaseWidth * size;
+    let newSize = floor ? Math.floor(result) : result;
+    return setMax && newSize > size ? size : newSize;
+};
+
+export { horizontalScale };
