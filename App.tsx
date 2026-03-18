@@ -5,7 +5,7 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { RootStackParamList } from './types/navigation';
 import { CustomNavigationBar } from './components/Appbar';
 import { Koti } from './screens/Koti';
-import { Juoksu } from './screens/Juoksu';
+import { Kartta } from './screens/Kartta';
 import { Profiili } from './screens/Profiili';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -23,7 +23,7 @@ export default function App() {
           header: (props) => <CustomNavigationBar {...props} />,
         }}>
         <Stack.Screen name="Koti" component={Koti} />
-        <Stack.Screen name="Juoksu" component={Juoksu} />
+        <Stack.Screen name="Kartta" component={Kartta} />
         <Stack.Screen name="Profiili" component={Profiili} />
       </Stack.Navigator>
       </SafeAreaView>

@@ -11,7 +11,7 @@ const { width, height } = Dimensions.get("window");
 
 const sivut = [
     { label: 'Koti', value: 'Koti' },
-    { label: 'Juoksu', value: 'Juoksu' },
+    { label: 'Kartta', value: 'Kartta' },
     { label: 'Profliili', value: 'Profiili' },
   ];
 
