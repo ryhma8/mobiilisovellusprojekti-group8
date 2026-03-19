@@ -1,8 +1,6 @@
 import { View } from "react-native";
 import { CartesianChart, Line } from "victory-native";
-import { Text } from "react-native-gesture-handler";
 import {useFont } from "@shopify/react-native-skia";
-import '@fontsource-variable/inter';
 
 export function MyChart() {
   

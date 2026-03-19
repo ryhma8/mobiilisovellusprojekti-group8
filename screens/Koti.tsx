@@ -4,7 +4,7 @@ import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka } from '../m
 
 export function Koti() {
 
-  const[TempResult, setTempResult] = useState(0)
+  const[TempResult, setTempResult] = useState(0) //hävitä myöhemmin tämä, testiä varten
 
   return (
     <View style={style.container}>
