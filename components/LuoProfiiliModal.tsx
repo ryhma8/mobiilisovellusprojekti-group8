@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { LuoProfiiliModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
-import { AddProfile, purgeDb } from '../Database/Database';
+import { AddProfile } from '../Database/Database';
 const { width, height } = Dimensions.get("window");
 
-export function LuoProfiiliValikkoModal({modalVisible, setModalVisible, db}: LuoProfiiliModalProps) {
 
+export function LuoProfiiliValikkoModal({modalVisible, setModalVisible, db, setInfogiven}: LuoProfiiliModalProps) {
+  
     const [etuNimi, setEtunimi] = useState<string>("")
     const [sukuNimi, setsukunimi] = useState("")
     const [ikä, setikä] = useState("")
@@ -17,17 +18,16 @@ function luoProfiili()
 {
     console.log("luoprofiilitest")
     if(!etuNimi && !sukuNimi && !ikä && !paino && !pituus) return
-    
     AddProfile(etuNimi, sukuNimi, ikä, paino, pituus, db)
-    //purgeDb()
     setModalVisible(false) //lopus kiinni modali jos onnistuu profiilin lisääminen
+    setInfogiven(true)
 }
 
   return (
     <View style={styles.container}>
       
     <Pressable onPress={() => setModalVisible(true)} >
-      <Text style={styles.text}>anna tietosi</Text>
+      <Text style={styles.text}>Luo käyttäjäprofiili</Text>
     </Pressable>
        <Modal 
         animationType="slide"
@@ -92,6 +92,7 @@ function luoProfiili()
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   textClose: 
