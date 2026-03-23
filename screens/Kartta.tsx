@@ -46,8 +46,8 @@ export function Kartta() {
         }
     }, []);
 
-    if(timeStarted = true) {
-        setTimeoutout(handleMessage, 3000)
+    if(timeStarted) {
+        setTimeout(handleMessage, 3000)
     }
 
     return (
