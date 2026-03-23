@@ -12,6 +12,8 @@ const sivut = [
     { label: 'Koti', value: 'Koti' },
     { label: 'Juoksu', value: 'Juoksu' },
     { label: 'Profliili', value: 'Profiili' },
+    { label: 'Sali', value: 'Sali'},
+    { label: 'Ohjelma', value: 'Ohjelma'}
   ];
 
 export function CustomNavigationBar({navigation, route, options, back }: Props) 
