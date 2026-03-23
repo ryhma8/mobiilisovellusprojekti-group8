@@ -1,11 +1,18 @@
-import React, { useEffect, useRef, useCallback } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
 
+interface coordInterface {
+    lat: number;
+    lng: number;
+}
+
 export function Kartta() {
     const webviewRef = useRef<WebView | null>(null);
+    const [coordList, setCoordList] = useState<Array<coordInterface>>([])
+    const [timeStarted, setTimeStarted] = useState(false)
 
     useEffect(() => {
         (async () => {
@@ -19,11 +26,18 @@ export function Kartta() {
 
         if (data === 'request-location') {
             try {
-                const position = await Location.getCurrentPositionAsync({});
+                setTimeStarted(true)
+                const position = await Location.getCurrentPositionAsync({
+                });
                 const coords = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
                 };
+
+                coordList.push(coords)
+
+                console.log("koordinaatit:",coordList)
+
                 webviewRef.current?.postMessage(JSON.stringify(coords));
 
             } catch (e) {
@@ -31,6 +45,10 @@ export function Kartta() {
             }
         }
     }, []);
+
+    if(timeStarted = true) {
+        setTimeoutout(handleMessage, 3000)
+    }
 
     return (
         <View style={styles.container}>

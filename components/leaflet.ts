@@ -26,6 +26,13 @@ export const leafletHtml = `<!DOCTYPE html>
     }
   }
 
+  
+
+  function callback(){
+    logToRN("request-location")
+    console.log("callbacktesti")
+  }
+
   const key = "ArtNedkKH4O6pHCVbzwG";
 
   const map = L.map('map').setView([49.2125578, 16.62662018], 14);
@@ -73,6 +80,7 @@ export const leafletHtml = `<!DOCTYPE html>
 
   // Nappi ja tyylitykset user location napille
   const locateControl = L.control({ position: "topleft" });
+  const locateControl2 = L.control({ position: "topright" });
 
   locateControl.onAdd = function () {
     const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
@@ -91,9 +99,10 @@ export const leafletHtml = `<!DOCTYPE html>
     div.onclick = function () {
       logToRN("request-location");
     };
-
+    
     return div;
   };
+
 
   locateControl.addTo(map);
 </script>
