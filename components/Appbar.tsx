@@ -16,15 +16,16 @@ const sivut = [
 
 export function CustomNavigationBar({navigation, route, options, back }: Props) 
 {
-  const title = getHeaderTitle(options, route.name);
   return (
     <View style={styles.container}>
       <Dropdown style={styles.navBox}
             
           data={sivut}
           maxHeight={height-height/20}
-          placeholderStyle={styles.text}
-          iconColor={'#000000'}
+          placeholderStyle={styles.itemtext}
+          selectedTextStyle={styles.itemtext}
+          iconColor={'#ffffff'}
+          itemTextStyle={styles.itemtext}
           itemContainerStyle={styles.list}
           labelField="label"
           valueField="value"
@@ -34,8 +35,6 @@ export function CustomNavigationBar({navigation, route, options, back }: Props)
           }}
        >
        </Dropdown>
-        <Text>testipalikka1</Text>
-        <Text>testipalikka2</Text>
       </View>
   );
 }
@@ -52,19 +51,28 @@ const styles = StyleSheet.create({
   navBox: 
   {
     margin: 1,
-    width: width/4,
-    height: height/25,
-    backgroundColor: '#8f7d7d',
-    borderRadius: 15
+    width: width/3,
+    height: height/20,
+    backgroundColor: '#9F6BFB',
+    borderRadius: 15,
   },
   text:
   {
     margin: 5,
-    fontSize: horizontalScale(16) // stackista lainattu funktio responsiviiselle fonttikoolle
+    fontSize: horizontalScale(18) // stackista lainattu funktio responsiviiselle fonttikoolle
+  },
+  itemtext:
+  {
+    margin: 5,
+    color: '#ffffff',
+    fontSize: horizontalScale(18) // stackista lainattu funktio responsiviiselle fonttikoolle
   },
   list:
   {
-    backgroundColor: '#8f7d7d',
-    fontSize: 20
+    backgroundColor: '#9F6BFB',
+    fontSize: horizontalScale(18),
+    borderBlockColor: '#000000',
+    borderWidth: 1,
+    margin: 1
   }
 });

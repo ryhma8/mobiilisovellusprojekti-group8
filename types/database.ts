@@ -4,13 +4,17 @@ export type DbProps=
 {
   db: SQLite.SQLiteDatabase | null
   setDb: (React.Dispatch<React.SetStateAction<SQLite.SQLiteDatabase | null>>)
-  setUserId: (React.Dispatch<React.SetStateAction<number | undefined>>)
+  setUserData: (React.Dispatch<React.SetStateAction<UserData[]>>) 
 }
 
-export type RefreshDbProps=
+export type UserData = 
 {
-  setDb: (React.Dispatch<React.SetStateAction<SQLite.SQLiteDatabase | null>>)
+  FirstName: string
+  LastName: string
+  Weight_Kg: number
+  Height_Cm: number
+  Age: number
+  Date: string
+  UserID: number
 }
-
-
 

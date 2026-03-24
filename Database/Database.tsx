@@ -1,22 +1,7 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, RefreshDbProps } from '../types/database';
+import { DbProps, UserData } from '../types/database';
 
-type UserID = 
-{
-  UserID: number
-}
-/*export function RefreshUIData({setDb}: RefreshDbProps)
-{
-  const initDB = async () => 
-    {
-      const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
-      setDb(database);
-      console.log("refresh")
-    };
- 
-    initDB();
-}*/
-export function Database({db, setDb, setUserId}: DbProps)
+export function Database({db, setDb, setUserData}: DbProps)
 {
     
     const initDB = async () => {
@@ -52,44 +37,29 @@ export function Database({db, setDb, setUserId}: DbProps)
       `);
 
 
-      loadUserData(database);
-      const userid = await getUserID(database)
-      setUserId(userid)
+      loadUserData(database, setUserData);
+      //purgeDb(database)
     };
-
     initDB();
 }
 
-const loadUserData = async (database: SQLite.SQLiteDatabase) => {
-    const result = await database.getAllAsync('SELECT * FROM UserData ORDER BY UserID DESC');
-    console.log("loaduserdata test")
-    console.log(result)
+const loadUserData = async (database: SQLite.SQLiteDatabase, setUserData: React.Dispatch<React.SetStateAction<UserData[]>>) => {
+   
+    const sql = database.sql
+    const userDataArr = await sql<UserData>`SELECT * FROM UserData ORDER BY UserID DESC`;
+    console.log(userDataArr)
+    setUserData(userDataArr)
   };
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null) => {
     
   if (!db) return;
     const result = await db.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Weight_Kg, Height_Cm, Age, Date) VALUES (1,?,?,?,?,?, date())', etuNimi, sukuNimi, paino, pituus, ikä) 
     //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
-
-    const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
-    loadUserData(database)
   };
 
-const getUserID = async(db: SQLite.SQLiteDatabase | null) => //tällä haetaan käyttäjän ID alussa jota käytetään käyttjän muiden taulujen SQL kyselyiden parametriksi
+  export const purgeDb = async(database: SQLite.SQLiteDatabase | null) =>
 {
-  console.log("getuser test" +db)
-  if (!db) return;
-
-    const sql = db.sql
-    const id = await sql<UserID>`SELECT UserID from UserData`;
-  if(id.length == 0) return
-  
-  console.log("käyttäjän ID on:")
-  console.log(id[0].UserID)
-  return id[0].UserID
-}
-  export const purgeDb = async() =>
-{
-  const database = await SQLite.openDatabaseAsync('JogAppDbdev.db');
+  if (!database) return;
+  console.log("dbpurge")
   await database.runAsync('DELETE FROM UserData')
 }

@@ -26,10 +26,10 @@ function luoProfiili()
   return (
     <View style={styles.container}>
       
-    <Pressable onPress={() => setModalVisible(true)} >
-      <Text style={styles.text}>Luo käyttäjäprofiili</Text>
+    <Pressable style={styles.Pressable2} onPress={() => setModalVisible(true)} >
+      <Text style={styles.textBold}>Luo käyttäjäprofiili</Text>
     </Pressable>
-       <Modal 
+       <Modal
         animationType="slide"
         visible={modalVisible}>
 
@@ -100,9 +100,23 @@ const styles = StyleSheet.create({
     fontSize: horizontalScale(16),
     fontWeight: 'bold'
   },
+   Pressable2: 
+  {
+    borderRadius: 10,
+    height: height/10,
+    width: width/1.2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   text: 
   {
     fontSize: horizontalScale(16)
+  },
+  textBold: 
+  {
+    fontSize: horizontalScale(20),
+    color: '#9F6BFB',
+    fontWeight: 'bold'
   },
   flex: 
   {
@@ -112,42 +126,48 @@ const styles = StyleSheet.create({
   },
   textinput: 
   {
-    backgroundColor: '#fcf1f1',
-    borderColor: '#a19292',
-    borderWidth: 1,
+    backgroundColor: '#ffffff',
     borderRadius: 10,
-    width: width/3
-
+    width: width/1.4
   },
   container: 
   {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 15
+  },
+  modalbackground: 
+  {
+    backgroundColor: '#9F6BFB'
   },
   PressableContainer: 
   {
     flex: 1,
     flexDirection: 'row',
     gap: width/10,
+    marginBottom: height/20,
   },
   Pressable: 
   {
-    backgroundColor: '#a57d7d',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     height: height/20,
     width: width/3,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 2,
+    elevation: 5,
   },
   modalView: 
   {
+    backgroundColor: '#9F6BFB',
     gap: height/20,
-    height: height/2.5,
     marginTop: height/10,
     margin: width/15,
-    backgroundColor: 'white',
     borderRadius: 20,
     padding: width/15,
     alignItems: 'flex-start',

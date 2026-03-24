@@ -8,12 +8,14 @@ const { width, height } = Dimensions.get("window");
 export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliModalProps) {
 
   return (
-    <View style={styles.container}>
+    <View style={styles.containerAsButton}> 
+      <Pressable
+                style= {styles.Pressable2} 
+                onPress={() => setModalVisible(true)}>
+         <Text style={styles.textPressable}>Muokkaa</Text>
+      </Pressable>
       
-    <Pressable onPress={() => setModalVisible(true)} >
-      <Text style={styles.text}>Muokkaa tietojasi</Text>
-    </Pressable>
-       <Modal 
+       <Modal
         animationType="slide"
         visible={modalVisible}>
 
@@ -40,13 +42,13 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
                 <Pressable
                 style= {styles.Pressable} 
                 onPress={() => setModalVisible(false)}>
-                    <Text style={styles.textClose}>Tallenna tietosi</Text>
+                    <Text style={styles.textPressableBlack}>Tallenna tietosi</Text>
                 </Pressable>
 
                 <Pressable
                 style= {styles.Pressable} 
                 onPress={() => setModalVisible(false)}>
-                    <Text style={styles.textClose}>Sulje modal</Text>
+                    <Text style={styles.textPressableBlack}>Sulje modal</Text>
                 </Pressable>     
             </View>
 
@@ -57,10 +59,16 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
 }
 
 const styles = StyleSheet.create({
-  textClose: 
+  textPressable: 
   {
     fontSize: horizontalScale(16),
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    color: '#ffffff'
+  },
+  textPressableBlack: 
+  {
+    fontSize: horizontalScale(16),
+    fontWeight: 'bold',
   },
   text: 
   {
@@ -72,21 +80,26 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
   },
+  pressableRow: 
+  {
+    gap: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textinput: 
   {
-    backgroundColor: '#fcf1f1',
-    borderColor: '#a19292',
-    borderWidth: 1,
+    backgroundColor: '#ffffff',
     borderRadius: 10,
-    width: width/3
-
+    width: width/1.4
   },
-  container: 
+  containerAsButton: 
   {
-    flex: 1,
-    backgroundColor: '#fff',
+
     alignItems: 'center',
     justifyContent: 'center',
+    height: height/15,
+    width: width/3,
+    margin: width/20
   },
   PressableContainer: 
   {
@@ -96,12 +109,21 @@ const styles = StyleSheet.create({
   },
   Pressable: 
   {
-    backgroundColor: '#a57d7d',
+    backgroundColor: '#ffffff',
     borderRadius: 10,
     height: height/20,
     width: width/3,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+   Pressable2: 
+  {
+    borderRadius: 10,
+    height: height/20,
+    width: width/3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#9F6BFB'
   },
   modalView: 
   {
@@ -109,7 +131,7 @@ const styles = StyleSheet.create({
     height: height/2.5,
     marginTop: height/10,
     margin: width/15,
-    backgroundColor: 'white',
+    backgroundColor: '#9F6BFB',
     borderRadius: 20,
     padding: width/15,
     alignItems: 'flex-start',
@@ -121,5 +143,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+  },
+  modalbackground: 
+  {
+    backgroundColor: '#9F6BFB'
   },
 });
