@@ -11,8 +11,9 @@ interface coordInterface {
 
 export function Kartta() {
     const webviewRef = useRef<WebView | null>(null);
+    const trackingRef = useRef<NodeJS.Timeout | null>(null);
     const [coordList, setCoordList] = useState<Array<coordInterface>>([])
-    const [timeStarted, setTimeStarted] = useState(false)
+    const [trackedJog, setTrackedJog] = useState<Array<coordInterface>>([])
 
     useEffect(() => {
         (async () => {
@@ -20,35 +21,61 @@ export function Kartta() {
         })();
     }, []);
 
-    const handleMessage = useCallback(async (event: any) => {
-    
-        const data = event.nativeEvent.data;
+    useEffect(() => {
+        if(coordList.length > 0 ) {
+            console.log("koordinaatit:", coordList);
+        } 
+    }, [coordList]);
 
-        if (data === 'request-location') {
-            try {
-                setTimeStarted(true)
-                const position = await Location.getCurrentPositionAsync({
-                });
-                const coords = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                };
+    useEffect(() => {
+        if(trackedJog.length > 0 ) {
+            console.log("viime juoksu:", trackedJog);
+        }
+    }, [trackedJog]);
 
-                coordList.push(coords)
+    const sendLocationToWebView = useCallback(async () => {
+        try {
+            const position = await Location.getCurrentPositionAsync({
+            });
+            const coords = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+            };
 
-                console.log("koordinaatit:",coordList)
+            setCoordList(prev => [...prev, coords]);
 
-                webviewRef.current?.postMessage(JSON.stringify(coords));
+            webviewRef.current?.postMessage(JSON.stringify(coords));
 
-            } catch (e) {
-                console.log('location error:', e);
-            }
+        } catch (e) {
+            console.log('location error:', e);
         }
     }, []);
 
-    if(timeStarted) {
-        setTimeout(handleMessage, 3000)
-    }
+    const handleMessage = useCallback(async (event: any) => {
+        const data = event.nativeEvent.data;
+
+        if (data === 'request-location') {
+            await sendLocationToWebView();
+        }
+
+        if (data === 'start-tracking') {
+            if (trackingRef.current) return;
+
+            trackingRef.current = setInterval(() => {
+                sendLocationToWebView();
+            }, 3000);
+        }
+
+        if (data === 'stop-tracking') {
+              console.log("STOPPING — coordList at stop:", coordList);
+            if (trackingRef.current) {
+                clearInterval(trackingRef.current);
+                trackingRef.current = null;
+            }
+            setTrackedJog(coordList);
+            setCoordList([]);
+        }
+    }, [sendLocationToWebView, coordList]);
 
     return (
         <View style={styles.container}>

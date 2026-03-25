@@ -1,27 +1,4 @@
-export const leafletHtml = `<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>Display a map</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<style>
-  html, body, #map {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-  }
-</style>
-
-</head>
-
-<body>
-<div id="map"></div>
-
-<script>
-  function logToRN(msg) {
+function logToRN(msg) {
     if (window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
       window.ReactNativeWebView.postMessage(String(msg));
     }
@@ -37,9 +14,10 @@ L.tileLayer("https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=" + key, {
   attribution: "&copy; MapTiler &copy; OpenStreetMap contributors"
 }).addTo(map);
 
-// Asetetaan userMarker ja isTracking boolean
+// Asetetaan userMarker
 let userMarker = null;
-let isTracking = false;
+
+
 
 // Asetetaan karttanäkymä sekä userMarker saaduilla koordinaateilla käyttäjän sijaintiin 
 function setUserLocation(lat, lng) {
@@ -103,31 +81,17 @@ startTrackingButton.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
 
   div.style.backgroundColor = "white";
-  div.style.padding = "6px 30px"; 
   div.style.width = "30px";
   div.style.height = "30px";
   div.style.cursor = "pointer";
   div.style.display = "flex";
   div.style.alignItems = "center";
   div.style.justifyContent = "center";
-  div.style.fontSize = "14px";
-  div.style.fontWeight = "bold";
-  div.style.borderRadius = "4px"; 
-  div.style.whiteSpace = "nowrap";
+  div.style.fontSize = "20px";
+  div.title = "Locate me";
 
-  div.innerHTML = "Aloita Juoksu";
-
-  div.onclick = function () {  
-    isTracking = !isTracking;
-
-    if (isTracking) {
-      div.innerHTML = "Lopeta Juoksu";
-      logToRN("request-location");
-      logToRN("start-tracking");
-    } else {
-      div.innerHTML = "Aloita Juoksu";
-      logToRN("stop-tracking");
-    }
+  div.onclick = function () {
+    logToRN("start-timer");
   };
     
   return div;
@@ -136,10 +100,3 @@ startTrackingButton.onAdd = function () {
 
 locateControl.addTo(map);
 startTrackingButton.addTo(map);
-
-</script>
-
-</body>
-</html>`;
-
-
