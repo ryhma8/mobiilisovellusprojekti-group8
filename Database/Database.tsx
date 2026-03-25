@@ -38,7 +38,6 @@ export function Database({db, setDb, setUserData}: DbProps)
 
 
       loadUserData(database, setUserData);
-      //purgeDb(database)
     };
     initDB();
 }
