@@ -21,7 +21,6 @@ export function Database({db, setDb, setUserId}: DbProps)
     
     const initDB = async () => {
     const database = await SQLite.openDatabaseAsync('JogAppDb1dev.db');
-    const userid = await getUserID(database)
     setDb(database);
 
       await database.execAsync(`
