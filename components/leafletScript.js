@@ -14,10 +14,9 @@ L.tileLayer("https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=" + key, {
   attribution: "&copy; MapTiler &copy; OpenStreetMap contributors"
 }).addTo(map);
 
-// Asetetaan userMarker
+// Asetetaan userMarker ja isTracking boolean
 let userMarker = null;
-
-
+let isTracking = false;
 
 // Asetetaan karttanäkymä sekä userMarker saaduilla koordinaateilla käyttäjän sijaintiin 
 function setUserLocation(lat, lng) {
@@ -81,17 +80,31 @@ startTrackingButton.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
 
   div.style.backgroundColor = "white";
+  div.style.padding = "6px 30px"; 
   div.style.width = "30px";
   div.style.height = "30px";
   div.style.cursor = "pointer";
   div.style.display = "flex";
   div.style.alignItems = "center";
   div.style.justifyContent = "center";
-  div.style.fontSize = "20px";
-  div.title = "Locate me";
+  div.style.fontSize = "14px";
+  div.style.fontWeight = "bold";
+  div.style.borderRadius = "4px"; 
+  div.style.whiteSpace = "nowrap";
 
-  div.onclick = function () {
-    logToRN("start-timer");
+  div.innerHTML = "Aloita Juoksu";
+
+  div.onclick = function () {  
+    isTracking = !isTracking;
+
+    if (isTracking) {
+      div.innerHTML = "Lopeta Juoksu";
+      logToRN("request-location");
+      logToRN("start-tracking");
+    } else {
+      div.innerHTML = "Aloita Juoksu";
+      logToRN("stop-tracking");
+    }
   };
     
   return div;

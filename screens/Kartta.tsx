@@ -42,6 +42,8 @@ export function Kartta() {
                 lng: position.coords.longitude,
             };
 
+            
+
             setCoordList(prev => [...prev, coords]);
 
             webviewRef.current?.postMessage(JSON.stringify(coords));
