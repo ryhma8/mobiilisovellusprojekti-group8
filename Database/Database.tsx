@@ -32,6 +32,7 @@ export function Database({db, setDb, setUserData}: DbProps)
           Repetitions INTEGER NOT NULL CHECK (Repetitions > 0),
           Weight_Kg REAL NOT NULL CHECK (Weight_Kg > 0),
           Exercise_Type TEXT NOT NULL,
+          Set_Amount INTEGER NOT NULL,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );      
       `);

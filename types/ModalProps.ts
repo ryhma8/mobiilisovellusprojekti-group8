@@ -27,3 +27,9 @@ export type LiikeModalProps={
   db: SQLite.SQLiteDatabase | null
 
 }
+export type PäiväModalProps={
+  modalVisiblepv: boolean
+  setModalVisiblepv: (React.Dispatch<React.SetStateAction<boolean>>)
+  db: SQLite.SQLiteDatabase | null
+
+}

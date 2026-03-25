@@ -13,7 +13,6 @@ import { Database } from './Database/Database';
 import * as SQLite from 'expo-sqlite';
 import { UserData } from './types/database';
 import { Sali } from './screens/Sali';
-import { Ohjelma } from './screens/Ohjelma';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,7 +36,6 @@ export default function App() {
         <Stack.Screen name="Juoksu" component={Juoksu} />
         <Stack.Screen name="Profiili" component={Profiili}  />
         <Stack.Screen name="Sali" component={Sali} />
-        <Stack.Screen name="Ohjelma" component={Ohjelma} />
       </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
