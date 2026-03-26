@@ -1,3 +1,4 @@
 # mobiilisovellusprojekti-group8
 
-<img width="1082" height="661" alt="dbbase" src="https://github.com/user-attachments/assets/e048e379-61ac-4d83-9f5f-8be373bc4028" />
+
+<img width="1128" height="677" alt="Näyttökuva 2026-03-26 232757" src="https://github.com/user-attachments/assets/5dc8ab7d-a02b-4c1c-a607-e10284d38cc6" />
