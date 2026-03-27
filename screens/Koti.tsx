@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
-<<<<<<< HEAD
-import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, laskeKoordinaatitKilometreiksi } from '../mathFunctions/functions';
-=======
 import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, LaskeMatkaKoordinaateista } from '../mathFunctions/functions';
->>>>>>> fad83e3fb0d8c190a94051ccc940153376142735
 import { Database } from '../Database/Database';
 import { UserData } from '../types/database';
 import * as SQLite from 'expo-sqlite';
