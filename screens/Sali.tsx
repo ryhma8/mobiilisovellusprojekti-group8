@@ -1,33 +1,46 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { OhjelmaModal } from '../components/OhjelmaModal'
 import { PäiväModal } from '../components/PäiväModal'
+import { Database } from '../Database/Database'
+import * as SQLite from 'expo-sqlite';
+import { UserData, UserWeight } from '../types/database';
+
 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Sali'>
 
 
 export function Sali({ route }: Props) {
+    useEffect(() => {
+        Database({ db, setDb, setUserData, setUserWeight }) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+        //purgeDb(db)
+    }, []);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisiblepv, setModalVisiblepv] = useState(false);
+    const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+    const [userData, setUserData] = useState<UserData[]>([])
+    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    
+
 
 
     return (
         <View style={styles.kontti}>
-             <PäiväModal
+            <PäiväModal
                 modalVisiblepv={modalVisiblepv}
                 setModalVisiblepv={setModalVisiblepv}
-                db={null}
-                >
+                db={db}
+            >
             </PäiväModal>
 
             <OhjelmaModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
-                db={null}
+                db={db}
             ></OhjelmaModal>
 
 
@@ -41,7 +54,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#c3c0c0ff',
+        backgroundColor: '#9F6BFB',
 
     },
     päiväbox: {

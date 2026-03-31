@@ -2,16 +2,21 @@ import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { LiikeModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
+import { AddExercise } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 
-export function LiikeModal({ modalVisible1, setModalVisible1 }: LiikeModalProps) {
+export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalProps) {
     const [liike, setLiike] = useState('')
     const [paino, setPaino] = useState('')
     const [toisto, setToisto] = useState('')
     const [sarja, setSarja] = useState('')
     const [lepo, setLepo] = useState('')
-
+    
+    function addMove() {
+        AddExercise(liike,paino,toisto,sarja,lepo,db)
+        setModalVisible1(false)
+    }
 
 
     return (
@@ -83,7 +88,7 @@ export function LiikeModal({ modalVisible1, setModalVisible1 }: LiikeModalProps)
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
-                            onPress={() => setModalVisible1(false)}>
+                            onPress={addMove}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
@@ -129,11 +134,11 @@ const styles = StyleSheet.create({
         verticalAlign: 'middle'
     },
     otsikko: {
-        backgroundColor:'#a2a2a2ff',
+        backgroundColor: '#a2a2a2ff',
         textAlign: 'center',
         fontSize: 20,
         padding: 10,
-        
+
     },
 
     input: {

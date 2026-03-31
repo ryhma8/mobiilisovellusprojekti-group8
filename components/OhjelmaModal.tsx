@@ -1,13 +1,23 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { OhjelmaModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
+import LiikeCard from './LiikeCard';
+import { Exercise } from '../types/database';
+import { loadGymData } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 
-export function OhjelmaModal({modalVisible, setModalVisible}: OhjelmaModalProps) {
-          const [modalVisible1, setModalVisible1] = useState(false);
+export function OhjelmaModal({modalVisible, setModalVisible, db}: OhjelmaModalProps) {
+
+const [modalVisible1, setModalVisible1] = useState(false);
+const [gymExerList, setgymExerList] = useState<Exercise[]>([])
+const numerotest = 1
+
+useEffect(() => {
+  loadGymData(setgymExerList)
+},[])
     
   return (
     <View> 
@@ -21,9 +31,11 @@ export function OhjelmaModal({modalVisible, setModalVisible}: OhjelmaModalProps)
         animationType="slide"
         visible={modalVisible}>
 
-          <View>
+          <View style={styles.ohjelmaModal}>
             
                 <Text style={styles.otsikko}>Luo uusi treeni</Text>
+                
+                <LiikeCard gymExerList={gymExerList}/>
 
             <View style={styles.modalNappiRivi}>   
                 <Pressable
@@ -40,7 +52,7 @@ export function OhjelmaModal({modalVisible, setModalVisible}: OhjelmaModalProps)
                 <LiikeModal
                           modalVisible1={modalVisible1}
                           setModalVisible1={setModalVisible1}
-                          db={null}                            
+                          db={db}                            
                             
                 ></LiikeModal>
             </View>
@@ -84,5 +96,9 @@ const styles = StyleSheet.create({
     textAlign:'center',
     fontSize:25,
     padding:10
+   },
+   ohjelmaModal:{
+    backgroundColor: '#9F6BFB',
+    flex:1
    }
 });
