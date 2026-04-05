@@ -24,7 +24,7 @@ export function LiikeModal({ modalVisible1, setModalVisible1, db }: LiikeModalPr
             <Pressable
 
                 onPress={() => setModalVisible1(true)}>
-                <Text style={styles.modalNappi}>Lisää liike</Text>
+                <Text style={styles.modalNappi}>Luo uusi liike</Text>
             </Pressable>
 
             <Modal
@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
     modalNappi: {
         backgroundColor: '#fc8bd2ff',
         padding: 5,
-        margin: 10,
+        margin: 5,
         width: 100,
         height: 40,
         borderRadius: 5,

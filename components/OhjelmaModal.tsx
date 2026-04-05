@@ -24,7 +24,7 @@ useEffect(() => {
       <Pressable
                  
                 onPress={() => setModalVisible(true)}>
-         <Text style={styles.modalNappi}>Luo uusi</Text>
+         <Text style={styles.modalNappi}>Liikkeet</Text>
       </Pressable>
       
        <Modal
@@ -33,7 +33,7 @@ useEffect(() => {
 
           <View style={styles.ohjelmaModal}>
             
-                <Text style={styles.otsikko}>Luo uusi treeni</Text>
+                <Text style={styles.otsikko}>Kaikki liikkeet</Text>
                 
                 <LiikeCard gymExerList={gymExerList}/>
 
@@ -65,20 +65,20 @@ useEffect(() => {
 
 const styles = StyleSheet.create({
     modalNappi:{
-        backgroundColor:'#fc8bd2ff',
+        backgroundColor: '#fc8bd2ff',
         padding: 5,
         margin: 10,
         width: 100,
-        height:40,
-        borderRadius:5,
-        fontSize:15,
-        textAlign:'center',
-        verticalAlign:'middle'
+        height: 40,
+        borderRadius: 5,
+        fontSize: 15,
+        textAlign: 'center',
+        verticalAlign: 'middle'
     },
     modalNappiRivi:{
         flexDirection:'row',
         justifyContent:'space-between',
-        padding:10,
+        padding:5,
         margin:5,
     },
    modalNapit:{

@@ -69,7 +69,7 @@ export const loadGymData = async (
   const sql = database.sql
   
   const tableData= await sql<Exercise>`SELECT * FROM GymData ORDER BY GymDataID DESC`;
-  console.log("tässä on " +tableData[1].Rest_Time_Minutes)
+  console.log("tässä on " +tableData[3].Exercise_Type)
   setgymExerList(tableData)
 };
 
@@ -85,6 +85,7 @@ export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string
 export const AddExercise = async (lepo: string, toisto: string, paino: string, liike: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
   if (!db) return;
   const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', lepo, toisto, paino, liike, sarja)
+
 }
 
 export const purgeDb = async (database: SQLite.SQLiteDatabase | null) => {

@@ -41,3 +41,9 @@ export type PäiväModalProps={
   db: SQLite.SQLiteDatabase | null
 
 }
+export type TreeniModalProps={
+  modalVisibleTreeni: boolean
+  setModalVisibleTreeni: (React.Dispatch<React.SetStateAction<boolean>>)
+  db: SQLite.SQLiteDatabase | null
+
+}

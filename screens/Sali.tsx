@@ -8,6 +8,7 @@ import { PäiväModal } from '../components/PäiväModal'
 import { Database } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
+import { TreeniModal } from '../components/TreeniModal'
 
 
 
@@ -21,6 +22,8 @@ export function Sali({ route }: Props) {
     }, []);
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisiblepv, setModalVisiblepv] = useState(false);
+    const [modalVisibleTreeni, setModalVisibleTreeni] = useState(false);
+
     const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
@@ -36,12 +39,19 @@ export function Sali({ route }: Props) {
                 db={db}
             >
             </PäiväModal>
-
+            <View style={styles.modalNappiRivi}>
             <OhjelmaModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 db={db}
             ></OhjelmaModal>
+
+            <TreeniModal
+                modalVisibleTreeni={modalVisibleTreeni}
+                setModalVisibleTreeni={setModalVisibleTreeni}
+                db={db}
+            ></TreeniModal>
+            </View>
 
 
 
@@ -84,7 +94,11 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
-
-
-    }
+    },
+    modalNappiRivi:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        padding:5,
+        margin:5,
+    },
 })
