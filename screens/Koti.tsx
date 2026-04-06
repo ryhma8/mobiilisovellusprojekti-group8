@@ -27,6 +27,8 @@ export function Koti() {
   useEffect(() => {
             Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
           }, []);
+
+        
   
 
   return (

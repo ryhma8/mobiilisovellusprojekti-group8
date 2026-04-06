@@ -5,7 +5,7 @@ export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 {
     
     const initDB = async () => {
-    const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
+    const database = await SQLite.openDatabaseAsync('JogAppDb4dev.db');
     setDb(database);
 
       await database.execAsync(`
@@ -25,7 +25,9 @@ export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
         );
         CREATE TABLE IF NOT EXISTS JogData (
           JogDataID INTEGER PRIMARY KEY AUTOINCREMENT,
-          UserID INTEGER NOT NULL, 
+          UserID INTEGER NOT NULL,
+          Avg_Speed REAL NOT NULL,
+          Calories_Burned REAL NOT NULL,
           length_Km REAL NOT NULL CHECK (length_Km >= 0),
           Time_Minutes REAL NOT NULL CHECK (Time_Minutes >= 0),
           Jog_Date TIMESTAMP NOT NULL,
@@ -52,15 +54,17 @@ export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 const loadUserData = async (
   database: SQLite.SQLiteDatabase, 
   setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
-  setUserRecords: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
+  setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
   {
    
     const sql = database.sql
-    const userDataArr = await sql<UserData>`SELECT * FROM UserData ORDER BY UserID DESC`;
-    const userRecords = await sql<UserWeight>`SELECT * FROM UserWeight ORDER BY UserID DESC`;
+    const userDataArr = await sql<UserData>`SELECT * FROM UserData`;
+    const userWeight = await sql<UserWeight>`SELECT * FROM UserWeight`;
+    const lmao = await database.getAllAsync('SELECT * FROM JogData WHERE UserID = 1 ORDER BY JogDataID')
+    console.log("käyttäjän jogdata: ", lmao)
     console.log(userDataArr)
     setUserData(userDataArr)
-    setUserRecords(userRecords)
+    setUserWeight(userWeight)
   };
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null) => {
     
@@ -76,3 +80,14 @@ export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string
   console.log("dbpurge")
   await database.runAsync('DELETE FROM UserData')
 }
+
+export const AddNewJog = async (fromStartAvgSpd: number, calories: number, distance: number, time_seconds: number, db: SQLite.SQLiteDatabase | null) => {
+        
+        if (!db) return;
+
+        const minutes = time_seconds / 60;
+    
+        const resultData = await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Date) VALUES (1,?,?,?,?,date())', fromStartAvgSpd, calories, distance, minutes)
+        //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
+        console.log("resultData: ",resultData)
+    };
