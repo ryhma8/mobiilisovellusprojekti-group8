@@ -3,13 +3,19 @@ import React, { useEffect, useState } from 'react'
 import { Exercise, UserData,UserWeight } from '../types/database';
 import * as SQLite from 'expo-sqlite';
 import { Database } from '../Database/Database';
+import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
 
 type gymArr = 
 {
     gymExerList: Exercise[]
 }
 
-export default function LiikeCard({gymExerList}: gymArr) {
+interface LiikeProps{
+    item: Exercise,
+}
+
+
+export default function LiikeCard({item}: LiikeProps) {
 
     const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
@@ -19,7 +25,7 @@ export default function LiikeCard({gymExerList}: gymArr) {
         <View>
             <TouchableOpacity>
 
-                <Text style={styles.liike}></Text>
+                <Text style={styles.liike}>{item.Exercise_Type}</Text>
             </TouchableOpacity>
         </View>
     )

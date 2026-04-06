@@ -23,7 +23,7 @@ export type LuoProfiiliModalProps=
   db: SQLite.SQLiteDatabase | null
   setInfogiven: (React.Dispatch<React.SetStateAction<boolean>>)
 }
-export type OhjelmaModalProps={
+export type LiikeListaModalProps={
   modalVisible: boolean
   setModalVisible: (React.Dispatch<React.SetStateAction<boolean>>)
   db: SQLite.SQLiteDatabase | null

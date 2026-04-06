@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
-import { OhjelmaModal } from '../components/OhjelmaModal'
 import { PäiväModal } from '../components/PäiväModal'
 import { Database, purgeDb } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
 import { TreeniModal } from '../components/TreeniModal'
+import { LiikeListaModal } from '../components/LiikeListaModal'
 
 
 
@@ -40,11 +40,11 @@ export function Sali({ route }: Props) {
             >
             </PäiväModal>
             <View style={styles.modalNappiRivi}>
-            <OhjelmaModal
+            <LiikeListaModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
                 db={db}
-            ></OhjelmaModal>
+            ></LiikeListaModal>
 
             <TreeniModal
                 modalVisibleTreeni={modalVisibleTreeni}

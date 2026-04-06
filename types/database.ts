@@ -24,6 +24,7 @@ export type UserWeight =
 }
 export type Exercise =
 {
+  [x: string]: any;
   Rest_Time_Minutes: number
   Repetitions: number
   Weight_Kg : number

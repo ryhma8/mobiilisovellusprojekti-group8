@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
-import { OhjelmaModalProps, TreeniModalProps } from '../types/ModalProps';
+import { LiikeListaModalProps, TreeniModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import LiikeCard from './LiikeCard';
