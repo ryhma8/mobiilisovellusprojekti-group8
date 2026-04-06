@@ -21,7 +21,7 @@ export function MyChart({jogDataArr}: chartProps) {
         yKeys={["distanceJogged"]}    
         domainPadding={{top: 30, bottom: 30}}
         axisOptions={{
-          tickCount: jogDataArr.length,
+          tickCount: jogDataArr.length, //tää sitä varten, että kartta luo oikean määrän ruudukoita. vakiona heittelee vähän sinnepäin ruutujen määrän.
           labelColor: '#ff1a1a',
           font: fontti
         }}
