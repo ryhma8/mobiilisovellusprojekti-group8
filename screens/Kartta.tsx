@@ -15,7 +15,7 @@ interface coordInterface {
 export function Kartta() {
     const webviewRef = useRef<WebView | null>(null);
     const statWebviewRef = useRef<WebView | null>(null);
-    const trackingRef = useRef<NodeJS.Timeout | null>(null);
+    const trackingRef = useRef<number | null>(null);
     const [coordList, setCoordList] = useState<coordInterface[]>([]);
     const [trackedJog, setTrackedJog] = useState<coordInterface[]>([]);
     const [distance, setDistance] = useState<number>(0);
@@ -65,16 +65,25 @@ export function Kartta() {
         const x0 = LaskeMatkaKoordinaateista(coordList.map(c => c.coords).slice(0, -1));
         const x1 = LaskeMatkaKoordinaateista(coordList.map(c => c.coords));
 
+        const m0 = x0 * 1000;
+        const m1 = x1 * 1000;
+
         const t0 = c0.time / 1000;
         const t1 = c1.time / 1000;
+        //const startTime = coordList[0].time / 1000;
 
         console.log("t0: ", t0);
         console.log("t1: ", t1);
-        console.log("x0: ", x0);
-        console.log("x1: ", x1);
+        console.log("m0: ", m0);
+        console.log("m1: ", m1);
 
-        setAvgSpd(laskeAvgNopeus(t0, t1, x0, x1));
-        setFromStartAvgSpd(laskeAvgNopeus(0, t1, 0, x1));
+ 
+        setAvgSpd(laskeAvgNopeus(t0, t1, m0, m1));
+
+   
+        setFromStartAvgSpd(laskeAvgNopeus(0, t1, 0, m1));
+  
+
         setDistance(x1);
 
         console.log("nopeus tällä hetkellä: ", avgSpd);
@@ -132,7 +141,7 @@ export function Kartta() {
 
             trackingRef.current = setInterval(() => {
                 sendLocationToWebView();
-            }, 3000);
+            }, 5000);
 
             startTime();
 
@@ -148,8 +157,6 @@ export function Kartta() {
             
             setTrackedJog(coordList);
 
-            setCoordList([]);
-
             setShowStats(true);
 
             setTimeout(() => {
@@ -158,6 +165,8 @@ export function Kartta() {
                     coords: coordList.map(c => c.coords)
                 }));
             }, 300)
+
+            setCoordList([]);
         }
     }, [sendLocationToWebView, coordList]);
 
@@ -226,7 +235,7 @@ export function Kartta() {
                             />
                         </View>
 
-                        <Text style={styles.statCardText}>Matka: {distance.toFixed(2)} m</Text>
+                        <Text style={styles.statCardText}>Matka: {distance.toFixed(2)} km</Text>
                         <Text style={styles.statCardText}>Keskinopeus: {avgSpd.toFixed(2)} m/s</Text>
                         <Text style={styles.statCardText}>Keskinopeus alusta: {fromStartAvgSpd.toFixed(2)} m/s</Text>
                         <Text style={styles.statCardText}>Aika: {formatTime(trackedJog.at(-1)?.time ?? 0)}</Text>
