@@ -17,7 +17,7 @@ export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
           Age INTEGER NOT NULL CHECK (Age >= 0)
         );
         CREATE TABLE IF NOT EXISTS UserWeight (
-          UserDataID INTEGER PRIMARY KEY AUTOINCREMENT,
+          UserWeightID INTEGER PRIMARY KEY AUTOINCREMENT,
           UserID INTEGER NOT NULL, 
           Weight_Kg REAL NOT NULL CHECK (Weight_kg >= 0),
           Date TIMESTAMP NOT NULL,
@@ -52,15 +52,15 @@ export function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 const loadUserData = async (
   database: SQLite.SQLiteDatabase, 
   setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
-  setUserRecords: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
+  setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
   {
    
     const sql = database.sql
     const userDataArr = await sql<UserData>`SELECT * FROM UserData ORDER BY UserID DESC`;
-    const userRecords = await sql<UserWeight>`SELECT * FROM UserWeight ORDER BY UserID DESC`;
+    const UserWeight = await sql<UserWeight>`SELECT * FROM UserWeight ORDER BY UserID DESC`;
     console.log(userDataArr)
     setUserData(userDataArr)
-    setUserRecords(userRecords)
+    setUserWeight(UserWeight)
   };
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null) => {
     
