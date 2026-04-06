@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     modalNappi: {
         backgroundColor: '#fc8bd2ff',
         padding: 5,
-        margin: 5,
+        margin: 10,
         width: 100,
         height: 40,
         borderRadius: 5,
