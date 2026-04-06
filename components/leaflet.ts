@@ -13,6 +13,11 @@ export const leafletHtml = `<!DOCTYPE html>
     margin: 0;
     padding: 0;
   }
+
+  #map {
+    padding-top: 80px; /* adjust height as needed */
+    box-sizing: border-box;
+  }
 </style>
 
 </head>
@@ -29,7 +34,7 @@ export const leafletHtml = `<!DOCTYPE html>
 
 const key = "ArtNedkKH4O6pHCVbzwG";
 
-const map = L.map('map').setView([49.2125578, 16.62662018], 14);
+const map = L.map('map').setView([65.0138, 25.4721], 14);
 
 L.tileLayer("https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=" + key, {
   tileSize: 256,
@@ -68,6 +73,10 @@ document.addEventListener("message", function(event) {
     } else {
       logToRN("WebView event error: " + event.data);
     }
+    
+    if (data.type === "coord-list") {
+      const latlngs = data.coords.map(c => [c.lat, c.lng]);
+    }
   } catch (e) {
     logToRN("WebView JSON parsetus epäonnistui: " + e.message + event.data);
   }
@@ -97,7 +106,7 @@ locateControl.onAdd = function () {
   return div;
 };
 
-const startTrackingButton = L.control({ position: "bottomleft" });
+const startTrackingButton = L.control({ position: "topright" });
 
 startTrackingButton.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
@@ -122,11 +131,14 @@ startTrackingButton.onAdd = function () {
 
     if (isTracking) {
       div.innerHTML = "Lopeta Juoksu";
-      logToRN("request-location");
       logToRN("start-tracking");
+      logToRN("request-location");
     } else {
       div.innerHTML = "Aloita Juoksu";
       logToRN("stop-tracking");
+
+      var polyline = L.polyline(latlngs, {color: 'red', weight: 4}).addTo(map);
+      map.fitBounds(polyline.getBounds());
     }
   };
     

@@ -4,7 +4,7 @@ import { coordType } from "../types/coordType"
 
 export function laskeAvgNopeus(t0: number, t1:number, x0: number, x1:number):number // yksiköt ovat sekunteja ja metrejä
 {
-    return Number(((x1 - x0) / (t1 - t0)).toFixed(2))
+    return parseFloat(((x1 - x0) / (t1 - t0)).toFixed(2))
 }
 
 export function laskeLenkinKalorit(painoKilogrammoina:number, Minuutit:number, keskinopeusMPS:number,):number
@@ -60,7 +60,7 @@ export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
     let lat2 = coordArr[iteraatiot+1].lat * Math.PI / 180
     let lng2 = coordArr[iteraatiot+1].lng * Math.PI / 180
 
-    console.log("lat1 " + lat1 + " " + "lat2 " + lat2 + " " + "lng1 " + lng1 + " " + "lng2 " + lng2 + " " + iteraatiot)
+    //console.log("lat1 " + lat1 + " " + "lat2 " + lat2 + " " + "lng1 " + lng1 + " " + "lng2 " + lng2 + " " + iteraatiot)
 
     let deltalat = (lat2 - lat1) // deltalatitude, eli leveyspiirin muutos
     let deltalng = (lng2 - lng1) // deltaaltitude, eli korkeuspiirin muutos    
@@ -76,7 +76,7 @@ export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
 
     //console.log(kokonaisMatka)
     }
-    return Number(kokonaisMatka.toFixed(2))
+    return parseFloat(kokonaisMatka.toFixed(2))
 }
 
 
