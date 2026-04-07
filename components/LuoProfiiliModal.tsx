@@ -14,13 +14,22 @@ export function LuoProfiiliValikkoModal({modalVisible, setModalVisible, db, setI
     const [paino, setPaino] = useState<string>("")
     const [pituus, setPituus] = useState<string>("")
 
-function luoProfiili()
+async function luoProfiili()
 {
     console.log("luoprofiilitest")
     if(!etuNimi && !sukuNimi && !ikä && !paino && !pituus) return
-    AddProfile(etuNimi, sukuNimi, ikä, paino, pituus, db)
-    setModalVisible(false) //lopus kiinni modali jos onnistuu profiilin lisääminen
-    setInfogiven(true)
+    
+    try {
+    
+      const res = await AddProfile(etuNimi, sukuNimi, ikä, paino, pituus, db)
+      setModalVisible(false) //lopus kiinni modali jos onnistuu profiilin lisääminen
+      setInfogiven(true)
+      console.log(res)
+    } catch (error) {
+      console.log("error")
+      alert("Tietokantavirhe, käynnistä sovellus uudelleen")
+    }
+    
 }
 
   return (
@@ -71,22 +80,14 @@ function luoProfiili()
                     placeholder='Pituus:'>
                     </TextInput>
 
-            </View>
-                
-            <View style={styles.PressableContainer}>   
                 <Pressable
                 style= {styles.Pressable} 
                 onPress={() => luoProfiili()}>
-                    <Text style={styles.textClose}>Luo profiili</Text>
+                <Text style={styles.textClose}>Luo profiili</Text>
                 </Pressable>
+  
 
-                <Pressable
-                style= {styles.Pressable} 
-                onPress={() => setModalVisible(false)}>
-                    <Text style={styles.textClose}>Sulje modal</Text>
-                </Pressable>     
             </View>
-
           </View>
       </Modal>
     </View>
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
   PressableContainer: 
   {
     flex: 1,
-    flexDirection: 'row',
+    flexDirection: 'column',
     gap: width/10,
     marginBottom: height/20,
   },

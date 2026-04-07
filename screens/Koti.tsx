@@ -4,6 +4,7 @@ import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, LaskeMatkaK
 import { Database } from '../Database/Database';
 import { UserData, UserWeight } from '../types/database';
 import * as SQLite from 'expo-sqlite';
+import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
 
 export function Koti() {
 
@@ -19,36 +20,46 @@ export function Koti() {
     {"lat": 65.076146 ,"lng": 25.500000},
 ]
 
-  const[TempResult, setTempResult] = useState(0) //hävitä myöhemmin tämä, testiä varten
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+  const [modalVisible, setModalVisible] = useState(true);// jos ei käyttäjää niin forcetetaan modali auki.
+  const [Infogiven, setInfogiven] = useState(false) //refreshiä varten, tällä checkillä saadaan sivu latautumaan uudelleen tietojen asettamisen jälkeen
+
+   if(Infogiven)
+      {
+        Database({db, setDb, setUserData, setUserWeight})
+        setInfogiven(false)
+      }
 
   useEffect(() => {
             Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
           }, []);
   
 
-  return (
-    <View style={style.container}>
-      <Button
-      onPress={() => setTempResult(LaskeMatkaKoordinaateista(dummydata))}
-      title="avg nopeus testi (5 sekuntia 14 metriä"
-      color="#841584"
-      ></Button>
-      <Button
-      onPress={() => setTempResult(laskeLenkinKalorit(70, 60, 3.5))}
-      title="kalorit testi (70kg 60min 3.5mps)"
-      color="#841584"
-      ></Button>
-      <Button
-      onPress={() => setTempResult(laskeJuoksujenAvgMatka([7.54, 5, 12.54, 8.6]))}
-      title="avg matka testi [7.54km, 5km, 12.54km, 8.6km]"
-      color="#841584"
-      ></Button>
-      <Text>{TempResult}</Text>
-    </View>
-  );
+  if(userData[0]?.UserID) // kysymysmerkki estää sen, että jos/kun usedata on undefined, ei tule runtime erroria.
+  {
+   return (
+   <View style={style.container}>
+    
+   <Text> Tämänhetkinen painosi: {UserWeight[0].Weight_Kg} kg</Text>
+   <Text> viimeisin lenkki: //lenkki pvm, lenkin pituus//</Text>
+   <Text> seuraava salitreeni: //seuraavan salitreeniin pvm//</Text>
+   </View>
+   );
+  }
+  else
+      return (
+                <View style={style.containerNodata}>
+                      <LuoProfiiliValikkoModal
+                      modalVisible= {modalVisible}
+                      setModalVisible={setModalVisible}
+                      db={db}
+                      setDb = {setDb}
+                      setInfogiven={setInfogiven}
+                      ></LuoProfiiliValikkoModal>
+                </View>
+              );
 }
 
 const style = StyleSheet.create({
@@ -63,5 +74,13 @@ text:
 {
   fontSize: 24,
   fontWeight: 'bold',
+},
+containerNodata: 
+{
+  flex: 1,
+  alignContent: 'center',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundColor: '#9F6BFB',
 },
 })

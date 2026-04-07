@@ -1,9 +1,9 @@
 import * as SQLite from 'expo-sqlite';
 import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
 
-export function Database({ db, setDb, setUserData, setUserWeight }: DbProps) {
-
-  const initDB = async () => {
+export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
+{
+    const initDB = async () => {
     const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
     setDb(database);
 
@@ -57,30 +57,38 @@ export function Database({ db, setDb, setUserData, setUserWeight }: DbProps) {
       `);
 
 
-    loadUserData(database, setUserData, setUserWeight);
-  };
-  initDB();
+      loadUserData(database, setUserData, setUserWeight);
+    };
+
+    try {
+      await initDB();
+    } catch (error) {
+      alert("tietokantavirhe, käynnistä sovellus uudelleen")
+    }
+
+   
 }
 
 const loadUserData = async (
   database: SQLite.SQLiteDatabase,
   setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
-  setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => {
-
-  const sql = database.sql
-  const userDataArr = await sql<UserData>`SELECT * FROM UserData ORDER BY UserID DESC`;
-  const UserWeight = await sql<UserWeight>`SELECT * FROM UserWeight ORDER BY UserID DESC`;
-  console.log(userDataArr)
-  setUserData(userDataArr)
-  setUserWeight(UserWeight)
-};
-export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null) => {
-
-  if (!db) return;
-  const resultData = await db.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
-  const resultWeight = await db.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, date())', paino)
-  //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
-};
+  setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
+  {
+   
+    const sql = database.sql
+    const userDataArr = await sql<UserData>`SELECT * FROM UserData ORDER BY UserID DESC`;
+    const UserWeight = await sql<UserWeight>`SELECT * FROM UserWeight ORDER BY UserID DESC`;
+    console.log(userDataArr)
+    setUserData(userDataArr)
+    setUserWeight(UserWeight)
+  };
+export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, db: SQLite.SQLiteDatabase | null): Promise<SQLite.SQLiteRunResult> => {
+    
+    const resultData = await db!.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
+    const resultWeight = await db!.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, date())', paino)  
+    return resultData
+    //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
+  };
 
 export const purgeDb = async (database: SQLite.SQLiteDatabase | null) => {
   if (!database) return;

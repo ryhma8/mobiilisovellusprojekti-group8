@@ -84,33 +84,10 @@ export function Profiili({ route }: Props) {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [ChartsVisible, setChartsVisible] = useState(false);
-  const [Infogiven, setInfogiven] = useState(false) //refreshiä varten, tällä checkillä saadaan sivu latautumaan uudelleen tietojen asettamisen jälkeen
   const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
-  
-    if(Infogiven)
-    {
-      Database({db, setDb, setUserData, setUserWeight})
-      setInfogiven(false)
-    }
 
-  if(!userData[0]?.UserID) // kysymysmerkki estää sen, että jos/kun usedata on undefined, ei tule runtime erroria.
-  {
-    return (
-      <View style={styles.containerNodata}>
-            <LuoProfiiliValikkoModal
-            modalVisible= {modalVisible}
-            setModalVisible={setModalVisible}
-            db={db}
-            setDb = {setDb}
-            setInfogiven={setInfogiven}
-            ></LuoProfiiliValikkoModal>
-      </View>
-    );
-  }
-  else
-  {
 return (
       
       <View style={styles.container}>
@@ -138,20 +115,19 @@ return (
 
                           <View style={styles.flexSingle}>
                               <View style={styles.textRow}>
-                                <Text  style= {styles.textName}> {userData[0].FirstName} </Text>
+                                <Text  style= {styles.textName}> {userData[0]?.FirstName} </Text>
                               </View>
 
                               <View style={styles.textRow}>
-                                <Text  style= {styles.textName}> {userData[0].LastName} </Text>
+                                <Text  style= {styles.textName}> {userData[0]?.LastName} </Text>
                               </View>
 
                               <View style={styles.textRow}>
-                                <Text  style= {styles.textName}> {userData[0].Height_Cm} cm </Text>
+                                <Text  style= {styles.textName}> {userData[0]?.Height_Cm} cm </Text>
                               </View>
 
-                              <View style={styles.textRow}>    
-                                <Text  style= {styles.textName}> {UserWeight[0].Weight_Kg} kg </Text>
-       
+                              <View style={styles.textRow}>                    
+                                <Text  style= {styles.textName}> {UserWeight[0]?.Weight_Kg} kg </Text>
                               </View>
                        
                           </View>  
@@ -189,7 +165,7 @@ return (
       </View>
     );
   }
-}
+
 
 const styles = StyleSheet.create({
 container: 
