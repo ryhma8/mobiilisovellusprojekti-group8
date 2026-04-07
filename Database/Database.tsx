@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, UserData, UserWeight } from '../types/database';
+import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
 
 export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 {
@@ -7,7 +7,7 @@ export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
     const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
     setDb(database);
 
-      await database.execAsync(`
+    await database.execAsync(`
         CREATE TABLE IF NOT EXISTS UserData (
           UserID INTEGER PRIMARY KEY,
           FirstName TEXT NOT NULL,
@@ -39,7 +39,21 @@ export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
           Exercise_Type TEXT NOT NULL,
           Set_Amount INTEGER NOT NULL,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
-        );      
+        );     
+        CREATE TABLE IF NOT EXISTS TrainData (
+          TrainDataID INTEGER PRIMARY KEY AUTOINCREMENT,
+          UserID INTEGER NOT NULL,
+          Liike1 INTEGER,
+          Liike2 INTEGER,
+          Liike3 INTEGER,
+          Liike4 INTEGER,
+          Liike5 INTEGER,
+          Liike6 INTEGER,
+          Liike7 INTEGER,
+          Liike8 INTEGER,
+          Liike9 INTEGER,
+          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
+        ); 
       `);
 
 
@@ -56,7 +70,7 @@ export async function Database({db, setDb, setUserData, setUserWeight}: DbProps)
 }
 
 const loadUserData = async (
-  database: SQLite.SQLiteDatabase, 
+  database: SQLite.SQLiteDatabase,
   setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
   setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
   {
@@ -76,9 +90,28 @@ export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string
     //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
   };
 
-  export const purgeDb = async(database: SQLite.SQLiteDatabase | null) =>
-{
+export const purgeDb = async (database: SQLite.SQLiteDatabase | null) => {
   if (!database) return;
   console.log("dbpurge")
-  await database.runAsync('DELETE FROM UserData')
+  //await database.runAsync('DELETE FROM UserData')
+  //await database.runAsync('DELETE FROM GymData')
+  //await database.runAsync('DELETE FROM UserWeight')
+
+
+}
+export const loadGymData = async (
+  setgymExerList: React.Dispatch<React.SetStateAction<Exercise[]>>) => {
+  console.log("ennen")
+  const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
+  if (!database) return
+  const sql = database.sql
+
+  const tableData = await sql<Exercise>`SELECT * FROM GymData ORDER BY GymDataID DESC`;
+  //console.log("tässä on " +tableData[4].Rest_Time_Minutes.toString())
+  setgymExerList(tableData)
+};
+export const AddExercise = async (lepo: string, toisto: string, paino: string, liike: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
+  if (!db) return;
+  console.log("INSERT ", { lepo, toisto, paino, liike, sarja });
+  const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, liike, sarja])
 }

@@ -22,3 +22,13 @@ export type UserWeight =
   Date: string
   UserID: number
 }
+export type Exercise =
+{
+  [x: string]: any;
+  Rest_Time_Minutes: number
+  Repetitions: number
+  Weight_Kg : number
+  Exercise_Type: string
+  Set_Amount:  number
+  UserID: number
+}

@@ -2,29 +2,34 @@ import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { LiikeModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
+import { AddExercise } from '../Database/Database';
 
 const { width, height } = Dimensions.get("window");
 
-export function LiikeModal({ modalVisible1, setModalVisible1 }: LiikeModalProps) {
+export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike, db }: LiikeModalProps) {
     const [liike, setLiike] = useState('')
     const [paino, setPaino] = useState('')
     const [toisto, setToisto] = useState('')
     const [sarja, setSarja] = useState('')
     const [lepo, setLepo] = useState('')
-
+    
+    function addMove() {
+        AddExercise(lepo,toisto,paino,liike,sarja,db)
+        setModalVisibleLiike(false)
+    }
 
 
     return (
         <View>
             <Pressable
 
-                onPress={() => setModalVisible1(true)}>
-                <Text style={styles.modalNappi}>Lisää liike</Text>
+                onPress={() => setModalVisibleLiike(true)}>
+                <Text style={styles.modalNappi}>Luo uusi liike</Text>
             </Pressable>
 
             <Modal
                 animationType="slide"
-                visible={modalVisible1}>
+                visible={modalVisibleLiike}>
 
                 <View>
                     <Text style={styles.otsikko}>Lisää liike, painot, toistot, lepo yms</Text>
@@ -83,12 +88,12 @@ export function LiikeModal({ modalVisible1, setModalVisible1 }: LiikeModalProps)
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
-                            onPress={() => setModalVisible1(false)}>
+                            onPress={addMove}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
                         <Pressable
-                            onPress={() => setModalVisible1(false)}>
+                            onPress={() => setModalVisibleLiike(false)}>
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
                     </View>
@@ -103,7 +108,7 @@ const styles = StyleSheet.create({
     modalNappi: {
         backgroundColor: '#fc8bd2ff',
         padding: 5,
-        margin: 10,
+        margin: 5,
         width: 100,
         height: 40,
         borderRadius: 5,
@@ -129,11 +134,11 @@ const styles = StyleSheet.create({
         verticalAlign: 'middle'
     },
     otsikko: {
-        backgroundColor:'#a2a2a2ff',
+        backgroundColor: '#a2a2a2ff',
         textAlign: 'center',
         fontSize: 20,
         padding: 10,
-        
+
     },
 
     input: {
