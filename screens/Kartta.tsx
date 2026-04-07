@@ -15,6 +15,11 @@ interface coordInterface {
     time: number;
 }
 
+type coords = {
+    lat: number
+    lng: number
+}
+
 export function Kartta() {
     const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
@@ -32,6 +37,7 @@ export function Kartta() {
     const [msToKm, setMsToKm] = useState<number>(0);
     const [spdText, setSpdText] = useState(false);
     const [calories, setCalories] = useState<number>(0);
+    const [prevCoords, setPrevCoords] = useState<coords>({lat: 0, lng: 0})
 
     const [isRunning, setIsRunning] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
@@ -93,14 +99,18 @@ export function Kartta() {
         console.log("m1: ", m1);
         console.log("paino", UserWeight);
 
- 
+        if(m1 == m0){
+            
+        }
+        else
+        {
         setAvgSpd(laskeAvgNopeus(t0, t1, m0, m1));
-
-   
         setFromStartAvgSpd(laskeAvgNopeus(0, t1, 0, m1));
 
         setMsToKm(avgSpd * 3.6);
         setFromStartMsToKm(fromStartAvgSpd * 3.6);
+        }
+        
 
         if(UserWeight != null || UserWeight != undefined) {
             setCalories(laskeLenkinKalorit(UserWeight[0].Weight_Kg, minuutit, fromStartAvgSpd))
@@ -132,6 +142,7 @@ export function Kartta() {
         try {
             const position = await Location.getCurrentPositionAsync({
             });
+
             const coords = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude,
@@ -148,6 +159,8 @@ export function Kartta() {
 
 
             webviewRef.current?.postMessage(JSON.stringify(coords));
+            
+            
 
         } catch (e) {
             console.log('location error:', e);
@@ -166,7 +179,7 @@ export function Kartta() {
 
             trackingRef.current = setInterval(() => {
                 sendLocationToWebView();
-            }, 5000);
+            }, 1000);
 
             startTime();
 
@@ -226,7 +239,7 @@ export function Kartta() {
             <Pressable onPress={() => setSpdText(prev => !prev ) }>
                 <View style={styles.numberContainer}>
                     <Text style={styles.teksti}>
-                        {spdText ? `Keskinopeus alusta: ${fromStartAvgSpd} km/h` : `Keskinopeus: ${avgSpd} km/h`}
+                        {spdText ? `Keskinopeus alusta: ${fromStartMsToKm} km/h` : `Keskinopeus: ${msToKm} km/h`}
                     </Text>
                 </View>
             </Pressable>
@@ -261,7 +274,7 @@ export function Kartta() {
                         </View>
 
                         <Text style={styles.statCardText}>Matka: {distance.toFixed(2)} km</Text>
-                        <Text style={styles.statCardText}>Keskinopeus alusta: {fromStartAvgSpd.toFixed(2)} km/h</Text>
+                        <Text style={styles.statCardText}>Keskinopeus alusta: {fromStartMsToKm.toFixed(2)} km/h</Text>
                         <Text style={styles.statCardText}>Aika: {formatTime(trackedJog.at(-1)?.time ?? 0)}</Text>
                         <Text style={styles.statCardText}>Kaloreita kulutettu: {calories.toFixed(0)}</Text>
 
