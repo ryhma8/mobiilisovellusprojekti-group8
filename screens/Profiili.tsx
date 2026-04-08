@@ -4,13 +4,12 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
 import { MyChart } from '../components/chart';
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
-import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
-import * as SQLite from 'expo-sqlite';
-import { Database, purgeDb } from '../Database/Database';
+import { loadUserData, purgeDb } from '../Database/Database';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { UserData, UserWeight } from '../types/database';
 import { Dropdown } from 'react-native-element-dropdown';
 import { ChartsModal } from '../components/ChartsModal';
+import { useSQLiteContext } from 'expo-sqlite';
 
 const { width, height } = Dimensions.get("window");
 
@@ -77,14 +76,15 @@ const dummyData2 =
 
 export function Profiili({ route }: Props) {
 
+  const db = useSQLiteContext(); //ladataan database konstekstista
+
    useEffect(() => {
-          Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+          loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
           //purgeDb(db)
         }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [ChartsVisible, setChartsVisible] = useState(false);
-  const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
 

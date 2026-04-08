@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {View, Text, StyleSheet, Button} from 'react-native';
-import { laskeAvgNopeus, laskeLenkinKalorit, laskeJuoksujenAvgMatka, LaskeMatkaKoordinaateista } from '../mathFunctions/functions';
-import { Database } from '../Database/Database';
+import { loadUserData } from '../Database/Database';
+import { useSQLiteContext } from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
-import * as SQLite from 'expo-sqlite';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
+
 
 export function Koti() {
 
-  const dummydata = 
-[
-    {"lat": 65.001916 ,"lng": 25.454775},
-    {"lat": 65.016146 ,"lng": 25.483967},
-    {"lat": 65.021916 ,"lng": 25.455775},
-    {"lat": 65.036146 ,"lng": 25.486967},
-    {"lat": 65.041916 ,"lng": 25.457775},
-    {"lat": 65.056146 ,"lng": 25.488967},
-    {"lat": 65.061916 ,"lng": 25.494775},
-    {"lat": 65.076146 ,"lng": 25.500000},
-]
+  const db = useSQLiteContext(); //ladataan database
 
-  const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
   const [modalVisible, setModalVisible] = useState(true);// jos ei käyttäjää niin forcetetaan modali auki.
@@ -28,12 +17,12 @@ export function Koti() {
 
    if(Infogiven)
       {
-        Database({db, setDb, setUserData, setUserWeight})
+        loadUserData(db, setUserData, setUserWeight)
         setInfogiven(false)
       }
 
   useEffect(() => {
-            Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+            loadUserData(db, setUserData, setUserWeight)
           }, []);
   
 
@@ -54,8 +43,6 @@ export function Koti() {
                       <LuoProfiiliValikkoModal
                       modalVisible= {modalVisible}
                       setModalVisible={setModalVisible}
-                      db={db}
-                      setDb = {setDb}
                       setInfogiven={setInfogiven}
                       ></LuoProfiiliValikkoModal>
                 </View>
