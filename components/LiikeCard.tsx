@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Exercise, UserData,UserWeight } from '../types/database';
-import * as SQLite from 'expo-sqlite';
-import { Database } from '../Database/Database';
+//import { Database } from '../Database/Database';
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { useSQLiteContext } from 'expo-sqlite';
 
 type gymArr = 
 {
@@ -12,19 +12,29 @@ type gymArr =
 
 interface LiikeProps{
     item: Exercise,
+    GymDataID: number;
+
 }
 
 
-export default function LiikeCard({item}: LiikeProps) {
 
-    const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+export default function LiikeCard({item, GymDataID}: LiikeProps) {
+
+    
+    const db = useSQLiteContext(); //ladataan database konstekstista
+    
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [selectedExec, setSelectedExec] = useState('')
+
+   
 
     return (
         <View>
-            <TouchableOpacity>
-                <Text style={styles.liike}>{item.GymDataID}  {item.Rest_Time_Minutes}</Text>
+            <TouchableOpacity
+            onPress={() => setSelectedExec(item.GymDataID)}
+            >
+                <Text style={styles.liike}>{item.GymDataID}  {item.Rest_Time_Minutes} {selectedExec} {GymDataID}</Text>
             </TouchableOpacity>
         </View>
     )

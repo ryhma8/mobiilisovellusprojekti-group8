@@ -43,7 +43,6 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
                             modalVisibleTreeni={modalVisibleTreeni}
                             setModalVisibleTreeni={setModalVisibleTreeni}
                             db={db}
-
                         ></TreeniModal>
                     </View>
 

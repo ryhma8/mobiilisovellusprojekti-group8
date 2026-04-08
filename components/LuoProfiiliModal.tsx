@@ -3,11 +3,13 @@ import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button
 import { LuoProfiiliModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { AddProfile } from '../Database/Database';
+import { useSQLiteContext } from 'expo-sqlite';
 const { width, height } = Dimensions.get("window");
 
 
-export function LuoProfiiliValikkoModal({modalVisible, setModalVisible, db, setInfogiven}: LuoProfiiliModalProps) {
-  
+export function LuoProfiiliValikkoModal({modalVisible, setModalVisible, setInfogiven}: LuoProfiiliModalProps) {
+
+    const db = useSQLiteContext(); //ladataan database konstekstista
     const [etuNimi, setEtunimi] = useState<string>("")
     const [sukuNimi, setsukunimi] = useState<string>("")
     const [ikä, setikä] = useState<string>("")

@@ -16,7 +16,7 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
   const numerotest = 1
 
   useEffect(() => {
-    loadGymData(setgymExerList)
+    loadGymData(setgymExerList, db) 
   }, [])
 
   return (
@@ -38,7 +38,7 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
           <FlatList
             data={gymExerList}
             keyExtractor={(item) => item.GymDataID.toString()}
-            renderItem={({ item }) => <LiikeCard item={item} />}
+            renderItem={({ item }) => <LiikeCard item={item} GymDataID={item.GymDataID}/>}
             style=""
           />
 
