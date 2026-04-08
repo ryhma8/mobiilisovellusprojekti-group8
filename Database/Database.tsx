@@ -74,7 +74,7 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase)
     const database = await SQLite.openDatabaseAsync('JogAppDb3dev.db');
     setDb(database);
 
-      await database.execAsync(`
+    await database.execAsync(`
         CREATE TABLE IF NOT EXISTS UserData (
           UserID INTEGER PRIMARY KEY,
           FirstName TEXT NOT NULL,
@@ -106,7 +106,21 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase)
           Exercise_Type TEXT NOT NULL,
           Set_Amount INTEGER NOT NULL,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
-        );      
+        );     
+        CREATE TABLE IF NOT EXISTS TrainData (
+          TrainDataID INTEGER PRIMARY KEY AUTOINCREMENT,
+          UserID INTEGER NOT NULL,
+          Liike1 INTEGER,
+          Liike2 INTEGER,
+          Liike3 INTEGER,
+          Liike4 INTEGER,
+          Liike5 INTEGER,
+          Liike6 INTEGER,
+          Liike7 INTEGER,
+          Liike8 INTEGER,
+          Liike9 INTEGER,
+          FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
+        ); 
       `);
 
 

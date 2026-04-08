@@ -75,12 +75,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                             <Text style={styles.modalNappi}>Sulje</Text>
                         </Pressable>
 
-                        <LiikeModal
-                            modalVisible1={modalVisiblepv}
-                            setModalVisible1={setModalVisiblepv}
-                            db={null}
-
-                        ></LiikeModal>
+                        
                     </View>
 
                 </View>
