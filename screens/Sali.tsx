@@ -1,34 +1,61 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
-import { OhjelmaModal } from '../components/OhjelmaModal'
 import { PäiväModal } from '../components/PäiväModal'
+import { loadUserData, purgeDb } from '../Database/Database'
+import * as SQLite from 'expo-sqlite';
+import { UserData, UserWeight } from '../types/database';
+import { TreeniListaModal } from '../components/TreeniListaModal'
+import { LiikeListaModal } from '../components/LiikeListaModal'
+import { useSQLiteContext } from 'expo-sqlite'
+
 
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Sali'>
 
 
 export function Sali({ route }: Props) {
-    const [modalVisible, setModalVisible] = useState(false);
+    
+    const db = useSQLiteContext(); //ladataan database konstekstista
+    
+    useEffect(() => {
+        loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+        //purgeDb(db)
+    }, []);
+    const [modalVisibleLiikeLista, setModalVisibleLiikeLista] = useState(false);
     const [modalVisiblepv, setModalVisiblepv] = useState(false);
+    const [modalVisibleTreeniLista, setModalVisibleTreeniLista] = useState(false);
+
+    //const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+    const [userData, setUserData] = useState<UserData[]>([])
+    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    
+
 
 
     return (
         <View style={styles.kontti}>
-             <PäiväModal
+            <PäiväModal
                 modalVisiblepv={modalVisiblepv}
                 setModalVisiblepv={setModalVisiblepv}
-                db={null}
-                >
+                db={db}
+            >
             </PäiväModal>
+            <View style={styles.modalNappiRivi}>
+            <LiikeListaModal
+                modalVisibleLiikeLista={modalVisibleLiikeLista}
+                setModalVisibleLiikeLista={setModalVisibleLiikeLista}
+                db={db}
+            ></LiikeListaModal>
 
-            <OhjelmaModal
-                modalVisible={modalVisible}
-                setModalVisible={setModalVisible}
-                db={null}
-            ></OhjelmaModal>
+            <TreeniListaModal
+                modalVisibleTreeniLista={modalVisibleTreeniLista}
+                setModalVisibleTreeniLista={setModalVisibleTreeniLista}
+                db={db}
+            ></TreeniListaModal>
+            </View>
 
 
 
@@ -41,7 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#c3c0c0ff',
+        backgroundColor: '#9F6BFB',
 
     },
     päiväbox: {
@@ -71,7 +98,11 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',
-
-
-    }
+    },
+    modalNappiRivi:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        padding:5,
+        margin:5,
+    },
 })

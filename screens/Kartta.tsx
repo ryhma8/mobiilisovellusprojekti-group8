@@ -177,7 +177,7 @@ export function Kartta() {
         if (data === 'start-tracking') {
             if (trackingRef.current) return;
 
-            trackingRef.current = setInterval(() => {
+            trackingRef.current = window.setInterval(() => {
                 sendLocationToWebView();
             }, 1000);
 
