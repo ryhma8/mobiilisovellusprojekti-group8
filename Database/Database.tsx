@@ -46,16 +46,16 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase)
           TrainDataID INTEGER PRIMARY KEY AUTOINCREMENT,
           UserID INTEGER NOT NULL,
           TrainName STRING NOT NULL,
-          Exec1 INTEGER,
-          Exec2 INTEGER,
-          Exec3 INTEGER,
-          Exec4 INTEGER,
-          Exec5 INTEGER,
-          Exec6 INTEGER,
-          Exec7 INTEGER,
-          Exec8 INTEGER,
-          Exec9 INTEGER,
-          Exec10 INTEGER,
+          Exec1 STRING,
+          Exec2 STRING,
+          Exec3 STRING,
+          Exec4 STRING,
+          Exec5 STRING,
+          Exec6 STRING,
+          Exec7 STRING,
+          Exec8 STRING,
+          Exec9 STRING,
+          Exec10 STRING,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );       
       `);
@@ -204,4 +204,9 @@ export const AddExercise = async (lepo: string, toisto: string, paino: string, E
   if (!db) return;
   console.log("INSERT ", { lepo, toisto, paino, Exec, sarja });
   const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, Exec, sarja])
+}
+export const AddTraining = async (trainName:string,Exec1:string, Exec2:string, Exec3:string, Exec4:string, Exec5:string, Exec6:string, Exec7:string, Exec8:string, Exec9:string, Exec10:string, db: SQLite.SQLiteDatabase | null) => {
+  if (!db) return;
+  console.log("INSERT execs: ", { trainName, Exec1, Exec2, Exec3});
+  const trainData = await db.runAsync('INSERT INTO TrainData (UserID,TrainName, Exec1,Exec2,Exec3,Exec4,Exec5,Exec6,Exec7,Exec8,Exec9,Exec10) VALUES (1,?,?,?,?,?,?,?,?,?,?,?)', [trainName,Exec1,Exec2,Exec3,Exec4,Exec5,Exec6,Exec7,Exec8,Exec9,Exec10])
 }

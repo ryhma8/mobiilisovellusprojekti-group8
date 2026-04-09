@@ -4,7 +4,7 @@ import { TreeniModalProps } from '../types/ModalProps'
 import { Modal } from 'react-native';
 import { Exercise } from '../types/database';
 import LiikeCard from './LiikeCard';
-import { loadGymData } from '../Database/Database';
+import { AddExercise, AddTraining, loadGymData } from '../Database/Database';
 
 export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: TreeniModalProps) {
 
@@ -15,6 +15,13 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
     useEffect(() => {
         loadGymData(setgymExerList, db)
     }, [])
+
+    function addTraining(){
+        console.log("ss")
+        AddTraining(trainName,select[0],select[1],select[2],select[3],select[4],select[5],select[6],select[7],select[8],select[9],db)
+        setSelect([])
+
+    }
 
     return (
         <View>
@@ -67,7 +74,7 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
                         <Pressable
-                            onPress={() => { setSelect([]); setModalVisibleTreeni(false) }}>
+                            onPress={() => {addTraining(); console.log(select)} }>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
