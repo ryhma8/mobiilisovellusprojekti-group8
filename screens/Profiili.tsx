@@ -24,55 +24,6 @@ const sivut = [
     { label: 'Profliili', value: 'Profiili' },
   ];
 
-    const testiObjekti = 
-{
-    Time: 60,
-    distanceJogged: 11,
-    date: "14/01/2025"
-}
-const dummyData = 
-[
-
-]
-const dummyData2 = 
-[
-  {
-    Time: 55,
-    distanceJogged: 9,
-    date: "10/01/2025"
-  },
-  {
-    Time: 67,
-    distanceJogged: 10,
-    date: "11/01/2025"
-  },
-   {
-    Time: 56,
-    distanceJogged: 12,
-    date: "12/01/2025"
-  },
-  {
-    Time: 60,
-    distanceJogged: 11,
-    date: "13/01/2025"
-  },
-  
-   {
-    Time: 56,
-    distanceJogged: 12,
-    date: "15/01/2025"
-  },
-  {
-    Time: 71,
-    distanceJogged: 11,
-    date: "17/01/2025"
-  },
-  {
-    Time: 66,
-    distanceJogged: 11,
-    date: "19/01/2025"
-  },
-]
 
 
 export function Profiili({ route }: Props) {
@@ -144,7 +95,7 @@ return (
       <ChartsModal
         ChartsVisible= {ChartsVisible}
         setChartsVisible={setChartsVisible}
-        JogDataArr= {dummyData2}>       
+        JogDataArr= {[]}>       
       </ChartsModal> 
 
       <View style={styles.PressableContainer}>

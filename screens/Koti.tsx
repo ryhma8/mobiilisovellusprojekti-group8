@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import {View, Text, StyleSheet, Button} from 'react-native';
+import {View, Text, StyleSheet, Button, Pressable} from 'react-native';
 import { loadUserData } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
+import { JogHistory } from '../components/JogHistory';
 
 
 interface coordlist 
@@ -16,6 +17,7 @@ export function Koti() {
 
   const db = useSQLiteContext(); //ladataan database
 
+  const [jogArr, setJogArr] = useState<string[]>([])
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
   const [modalVisible, setModalVisible] = useState(true);// jos ei käyttäjää niin forcetetaan modali auki.
@@ -42,6 +44,14 @@ export function Koti() {
    <Text> Tämänhetkinen painosi: {UserWeight[0].Weight_Kg} kg</Text>
    <Text> viimeisin lenkki: //lenkki pvm, lenkin pituus//</Text>
    <Text> seuraava salitreeni: //seuraavan salitreeniin pvm//</Text>
+
+   <Pressable onPress={() => JogHistory(db, setJogArr) }>
+                                      <View style={style.container}>
+                                          <Text style={style.text}>
+                                              testi
+                                          </Text>
+                                      </View>
+                                  </Pressable>
    </View>
    );
   }
@@ -53,7 +63,10 @@ export function Koti() {
                       setModalVisible={setModalVisible}
                       setInfogiven={setInfogiven}
                       ></LuoProfiiliValikkoModal>
+
+
                 </View>
+
               );
 }
 

@@ -19,7 +19,7 @@ export default function App() {
 
   return (
     <SQLiteProvider
-      databaseName="JogAppDb4dev.db"
+      databaseName="JogAppDb7dev.db"
       onInit={InitDatabase}
     >
     <NavigationContainer>

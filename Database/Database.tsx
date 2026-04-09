@@ -27,8 +27,11 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase)
         CREATE TABLE IF NOT EXISTS JogData (
           JogDataID INTEGER PRIMARY KEY AUTOINCREMENT,
           UserID INTEGER NOT NULL, 
+          Avg_Speed REAL NOT NULL,
+          Calories_Burned REAL NOT NULL,
           length_Km REAL NOT NULL CHECK (length_Km >= 0),
           Time_Minutes REAL NOT NULL CHECK (Time_Minutes >= 0),
+          Jog_Coordinates TEXT NOT NULL,
           Jog_Date TIMESTAMP NOT NULL,
           FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );
@@ -175,18 +178,20 @@ export const purgeDb = async(database: SQLite.SQLiteDatabase | null) =>
   await database.runAsync('DELETE FROM UserData')
 }
 
-export const AddNewJog = async (fromStartMsToKm: number, calories: number, distance: number, time_seconds: number, db: SQLite.SQLiteDatabase | null) => {
+export const AddNewJog = async (fromStartMsToKm: number, calories: number, distance: number, time_seconds: number, coordsStringify: string, db: SQLite.SQLiteDatabase | null) => {
         
         if (!db) return;
 
         const minutes = time_seconds / 1000 / 60;
+
+        console.log("cords ", coordsStringify)
     
-        const resultData = await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Date) VALUES (1,?,?,?,?,date())', fromStartMsToKm, calories, distance, minutes)
+        const resultData = await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,date())', fromStartMsToKm, calories, distance, minutes, coordsStringify )
         //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
         console.log("resultData: ",resultData)
 
         const xd = await db.getAllAsync<Jogdata>(`SELECT * FROM JogData`);
-        console.log("joggi data ", xd)
+        //console.log("joggi data ", xd[6].Jog_Coordinates)
 
 
     };
@@ -197,6 +202,18 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
   const tableData = await database.getAllAsync<Exercise>(`SELECT * FROM GymData ORDER BY GymDataID DESC`);
   //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
   setgymExerList(tableData)
+};
+
+export const loadJogArr = async (
+  setJogArr: React.Dispatch<React.SetStateAction<string[]>>, 
+  database: SQLite.SQLiteDatabase | null,
+  id:number):Promise<string | undefined> => {
+  
+  if (!database) return
+  const JogObj = await database.getAllAsync<string>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
+  //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
+  setJogArr(JogObj)
+  return JogObj[0]
 };
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
