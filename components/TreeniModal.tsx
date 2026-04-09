@@ -10,6 +10,7 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
 
     const [gymExerList, setgymExerList] = useState<Exercise[]>([])
     const [trainName, setTrainName] = useState('')
+    const [select, setSelect] = useState<string[]>([])
 
     useEffect(() => {
         loadGymData(setgymExerList, db)
@@ -39,18 +40,34 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                     <FlatList
                         data={gymExerList}
                         keyExtractor={(item) => item.GymDataID.toString()}
-                        renderItem={({ item }) => <LiikeCard item={item} GymDataID={item.GymDataID} />}
+                        renderItem={({ item }) =>
+                            <LiikeCard
+                                item={item}
+                                GymDataID={item.GymDataID}
+                                toggleSelect={(id) => {
+                                    setSelect((prevSelect) => {
+                                        if (prevSelect.includes(id)) {
+                                            return prevSelect.filter((item) => item !== id);
+                                        } else {
+                                            return [...prevSelect, id];
+                                        }
+                                    }
+                                    )
+                                }}
+                                selected={select.includes(item.GymDataID)}
+
+                            />}
                         style=""
                     />
-
+                    <Text>{select}</Text>
                     <View style={styles.modalNappiRivi}>
 
                         <Pressable
-                            onPress={() => setModalVisibleTreeni(false)}>
+                            onPress={() => { setSelect([]); setModalVisibleTreeni(false) }}>
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
                         <Pressable
-                            onPress={() => setModalVisibleTreeni(false)}>
+                            onPress={() => { setSelect([]); setModalVisibleTreeni(false) }}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
@@ -104,7 +121,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     input: {
-        backgroundColor:'white',
+        backgroundColor: 'white',
         height: 40,
         margin: 12,
         borderWidth: 1,

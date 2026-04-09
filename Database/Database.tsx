@@ -184,12 +184,9 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
   //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
   setgymExerList(tableData)
 };
-export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
   if (!db) return;
-  console.log("INSERT ", { lepo, toisto, paino, Exec, sarja });
-  const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, Exec, sarja])
   console.log("INSERT ", { lepo, toisto, paino, Exec, sarja });
   const execData = await db.runAsync('INSERT INTO GymData (UserID, Rest_Time_Minutes, Repetitions, Weight_Kg, Exercise_Type, Set_Amount) VALUES (1,?,?,?,?,?)', [lepo, toisto, paino, Exec, sarja])
 }

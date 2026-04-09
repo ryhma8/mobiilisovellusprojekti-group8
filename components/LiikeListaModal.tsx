@@ -38,7 +38,12 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
           <FlatList
             data={gymExerList}
             keyExtractor={(item) => item.GymDataID.toString()}
-            renderItem={({ item }) => <LiikeCard item={item} GymDataID={item.GymDataID}/>}
+            renderItem={({ item }) =>
+            <LiikeCard 
+            item={item}
+            GymDataID={item.GymDataID}
+            toggleSelect={()=>""}/>
+}
             style=""
           />
 
