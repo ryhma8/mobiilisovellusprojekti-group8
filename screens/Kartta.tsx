@@ -8,7 +8,8 @@ import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '.
 import { center } from '@shopify/react-native-skia';
 import { UserData, UserWeight } from '../types/database';
 import * as SQLite from 'expo-sqlite';
-import { Database, AddNewJog } from '../Database/Database';
+import { loadUserData, AddNewJog } from '../Database/Database';
+import { useSQLiteContext } from 'expo-sqlite';
 
 interface coordInterface {
     coords: { lat: number; lng: number; };
@@ -21,7 +22,9 @@ type coords = {
 }
 
 export function Kartta() {
-    const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+
+    const db = useSQLiteContext(); //ladataan database
+    
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
 
@@ -53,7 +56,7 @@ export function Kartta() {
     }, []);
 
     useEffect(() => {
-              Database({db, setDb, setUserData, setUserWeight}) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+              loadUserData(db, setUserData, setUserWeight) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
               //purgeDb(db)
             }, []);
 
@@ -280,7 +283,7 @@ export function Kartta() {
 
                         <View style={{ flexDirection:"row", justifyContent: "space-between", width: "100%", }}>
                             <Pressable
-                                onPress={() => AddNewJog(fromStartAvgSpd, calories, distance, trackedJog.at(-1)?.time ?? 0, db) }
+                                onPress={() => AddNewJog(fromStartMsToKm, calories, distance, trackedJog.at(-1)?.time ?? 0, db) }
                                 style={styles.statcardButton}
                             >
                                 <Text style={styles.statcardButtonText}>Tallenna</Text>
