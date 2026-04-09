@@ -3,21 +3,15 @@ import { loadJogArr } from "../Database/Database";
 import { useSQLiteContext } from "expo-sqlite";
 import * as SQLite from 'expo-sqlite';
 
-export function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: React.Dispatch<React.SetStateAction<string[]>>) {
+export async function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: React.Dispatch<React.SetStateAction<string[]>>) {
 
     console.log("called")
+    const data = await loadJogArr(setJogArr, db, 1);
+    //console.log("data: ", data)
+    const nestedData = data![0]
+    //console.log("nested data: ", nestedData)
+    const coordsData = nestedData.Jog_Coordinates
+    console.log("coords data: ", coordsData)
 
-    async function getdata() {
-    const coords = await loadJogArr(setJogArr,db, 1)
-    const coords2 = coords
-
-        console.log("prev ")
-        //const output = coords![0].toString().replace(/\\/g, '');
-        console.log("loaded jog coordinates ", coords2!.replace(/\\/g, ''))
-    
-    //const strToOgj = JSON.parse(coords!)
-
-    
-    }
-    getdata()
+    return coordsData;
 }

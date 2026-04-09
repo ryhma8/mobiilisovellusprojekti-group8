@@ -207,13 +207,14 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
 export const loadJogArr = async (
   setJogArr: React.Dispatch<React.SetStateAction<string[]>>, 
   database: SQLite.SQLiteDatabase | null,
-  id:number):Promise<string | undefined> => {
+  id:number):Promise<string[] | undefined> => {
   
   if (!database) return
   const JogObj = await database.getAllAsync<string>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
   //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
+  console.log("jogobj[0]: ", JogObj[0])
   setJogArr(JogObj)
-  return JogObj[0]
+  return JogObj
 };
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
