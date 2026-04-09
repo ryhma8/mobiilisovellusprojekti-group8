@@ -76,7 +76,7 @@ export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
 
     //console.log(kokonaisMatka)
     }
-    return parseFloat(kokonaisMatka.toFixed(2))
+    return kokonaisMatka
 }
 
 

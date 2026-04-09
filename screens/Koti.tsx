@@ -24,6 +24,8 @@ export function Koti() {
   useEffect(() => {
             loadUserData(db, setUserData, setUserWeight)
           }, []);
+
+        
   
 
   if(userData[0]?.UserID) // kysymysmerkki estää sen, että jos/kun usedata on undefined, ei tule runtime erroria.
