@@ -12,7 +12,7 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
     const [trainName, setTrainName] = useState('')
 
     useEffect(() => {
-        loadGymData(setgymExerList)
+        loadGymData(setgymExerList, db)
     }, [])
 
     return (

@@ -16,7 +16,7 @@ export function LiikeListaModal({ modalVisibleLiikeLista, setModalVisibleLiikeLi
   const numerotest = 1
 
   useEffect(() => {
-    loadGymData(setgymExerList)
+    loadGymData(setgymExerList, db) 
   }, [])
 
   return (

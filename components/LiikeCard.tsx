@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Exercise, UserData,UserWeight } from '../types/database';
-import * as SQLite from 'expo-sqlite';
-import { Database } from '../Database/Database';
+//import { Database } from '../Database/Database';
 import { Item } from 'react-native-paper/lib/typescript/components/Drawer/Drawer';
+import { useSQLiteContext } from 'expo-sqlite';
 
 type gymArr = 
 {
@@ -21,7 +21,8 @@ interface LiikeProps{
 export default function LiikeCard({item, GymDataID}: LiikeProps) {
 
     
-    const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+    const db = useSQLiteContext(); //ladataan database konstekstista
+    
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
     const [selectedExec, setSelectedExec] = useState('')

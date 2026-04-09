@@ -4,11 +4,12 @@ import { RootStackParamList } from '../types/navigation'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { useNavigation } from '@react-navigation/native'
 import { PäiväModal } from '../components/PäiväModal'
-import { Database, purgeDb } from '../Database/Database'
+import { loadUserData, purgeDb } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
 import { UserData, UserWeight } from '../types/database';
 import { TreeniListaModal } from '../components/TreeniListaModal'
 import { LiikeListaModal } from '../components/LiikeListaModal'
+import { useSQLiteContext } from 'expo-sqlite'
 
 
 
@@ -16,15 +17,18 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Sali'>
 
 
 export function Sali({ route }: Props) {
+    
+    const db = useSQLiteContext(); //ladataan database konstekstista
+    
     useEffect(() => {
-        Database({ db, setDb, setUserData, setUserWeight }) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+        loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
         //purgeDb(db)
     }, []);
     const [modalVisibleLiikeLista, setModalVisibleLiikeLista] = useState(false);
     const [modalVisiblepv, setModalVisiblepv] = useState(false);
     const [modalVisibleTreeniLista, setModalVisibleTreeniLista] = useState(false);
 
-    const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
+    //const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
     

@@ -8,21 +8,20 @@ import { Koti } from './screens/Koti';
 import { Kartta } from './screens/Kartta';
 import { Profiili } from './screens/Profiili';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEffect, useState } from 'react';
-import { Database } from './Database/Database';
-import * as SQLite from 'expo-sqlite';
-import { UserData } from './types/database';
 import { Sali } from './screens/Sali';
+import { SQLiteProvider } from 'expo-sqlite';
+import { InitDatabase } from './Database/Database';
 
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
 
-  //const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
-  //const [userData, setUserData] = useState<UserData[]>([])
-
-  return (  
+  return (
+    <SQLiteProvider
+      databaseName="JogAppDb4dev.db"
+      onInit={InitDatabase}
+    >
     <NavigationContainer>
       <SafeAreaView style={styles.container}>  
       <StatusBar/>   
@@ -39,7 +38,7 @@ export default function App() {
       </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>
-  
+  </SQLiteProvider>
   );
 }
 
