@@ -47,3 +47,8 @@ export type Training =
     Exer9: string
     Exer10: string
   }
+export type TrainDay=
+{
+  TrainNumber: number
+  Day: number
+}
