@@ -34,6 +34,7 @@ export type Exercise =
   }
 export type Training =
   {
+    [x: string]: any;
     TrainName: string
     Exer1: string
     Exer2: string

@@ -5,8 +5,9 @@ import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import LiikeCard from './LiikeCard';
 import { Exercise, Training } from '../types/database';
-import { loadGymData } from '../Database/Database';
+import { loadGymData, loadTrainData } from '../Database/Database';
 import { TreeniModal } from './TreeniModal';
+import TreeniCard from './TreeniCard';
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,7 +16,9 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
     const [gymTrainList, setGymTrainList] = useState<Training[]>([])
     const numerotest = 1
 
-
+useEffect(() => {
+    loadTrainData(setGymTrainList, db) 
+  }, [])
 
     return (
         <View>
@@ -35,12 +38,12 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
 
                     <FlatList
                                 data={gymTrainList}
-                                keyExtractor={(item) => item.GymDataID.toString()}
+                                keyExtractor={(item) => item.TrainDataID.toString()}
                                 renderItem={({ item }) =>
-                                <LiikeCard 
+                                <TreeniCard 
                                 item={item}
-                                GymDataID={item.GymDataID}
-                                toggleSelect={()=>""}/>
+                                TrainDataID={item.TrainDataID}
+                                />
                     }
                                 style=""
                               />

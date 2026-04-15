@@ -1,5 +1,5 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
+import { DbProps, Exercise, Training, UserData, UserWeight } from '../types/database';
 import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
 import { Jogdata } from '../types/JogData';
 
@@ -198,6 +198,12 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
   const tableData = await database.getAllAsync<Exercise>(`SELECT * FROM GymData ORDER BY GymDataID DESC`);
   //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
   setgymExerList(tableData)
+};
+export const loadTrainData = async (setGymTrainList: React.Dispatch<React.SetStateAction<Training[]>>, database: SQLite.SQLiteDatabase | null) => {
+    if (!database) return
+  const tableDataTrain = await database.getAllAsync<Training>(`SELECT * FROM TrainData ORDER BY TrainDataID DESC`);
+  //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
+  setGymTrainList(tableDataTrain)
 };
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {
