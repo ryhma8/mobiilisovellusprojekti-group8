@@ -1,4 +1,4 @@
 # mobiilisovellusprojekti-group8
 
 
-<img width="1171" height="683" alt="Näyttökuva 2026-03-27 001018" src="https://github.com/user-attachments/assets/e3d7d4f7-9f3c-4a91-9249-5c33a298dd7d" />
+<img width="1493" height="705" alt="Näyttökuva 2026-04-16 122342" src="https://github.com/user-attachments/assets/625ee40a-3bb4-4db9-85aa-0081e955a66a" />
