@@ -234,14 +234,12 @@ export function Kartta() {
         let hours = Math.floor(ms / (1000 * 60 * 60));
         let minutes = Math.floor(ms / (1000 * 60) % 60);
         let seconds = Math.floor(ms / (1000) % 60);
-        let milliseconds = Math.floor((ms % 1000) / 10);
 
         const hoursString = String(hours).padStart(2, "0");
         const minutesString = String(minutes).padStart(2, "0");
         const secondsString = String(seconds).padStart(2, "0");
-        const millisecondsString = String(milliseconds).padStart(2, "0");
 
-        return `${hoursString}:${minutesString}:${secondsString}.${millisecondsString}`
+        return `${hoursString}:${minutesString}:${secondsString}`
     }
 
 

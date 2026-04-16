@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { loadJogArr } from "../Database/Database";
 import * as SQLite from 'expo-sqlite';
 
-export async function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>) {
+/*export async function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>) {
 
     console.log("called")
 
@@ -12,4 +12,7 @@ export async function JogHistory(db: SQLite.SQLiteDatabase | null, setJogArr: Re
     let coordToObj = JSON.parse(coordCleaned)
     console.log("coordCleaned tyyppi: "+typeof(coordCleaned)+ " "+"coordToObj tyyppi: "+typeof(coordToObj))
     console.log("coordToObj: ", coordToObj)
+    return coordToObj;
 }
+
+*/

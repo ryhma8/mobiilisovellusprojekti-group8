@@ -235,19 +235,32 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
 };
 
 export const loadJogArr = async (
-  setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>, 
   database: SQLite.SQLiteDatabase | null,
-  id:number):Promise<string | undefined> => {
+  //setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>, 
+  setJogDataArr: React.Dispatch<React.SetStateAction<WeightAndJogdata[]>>, 
+  //setFirstJogId: React.Dispatch<React.SetStateAction<jogId | undefined>>,
+  ):Promise<string | undefined> => {
 
   
   if (!database) return ""
   //const JogObjall = await database.getAllAsync<string>(`SELECT * FROM JogData`);
-  const JogObj = await database.getAllAsync<jogCoordinates>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
+  //const JogObj = await database.getAllAsync<jogCoordinates>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
   
-  console.log("jogobj: ", JogObj[0].Jog_Coordinates)
+  //console.log("jogobj: ", JogObj[0].Jog_Coordinates)
+  const JogDataArray = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData ORDER BY JogDataID DESC LIMIT 10`);
+  //console.log("jog distance arr: ", JogDataArray)
+
+  //const firstJogID = await database.getFirstAsync<jogId>(`SELECT JogDataID FROM JogData ORDER By JogDataID`) //haetaan vanhin jogdata id
+  //if(firstJogID?.JogDataID) {
+    //setFirstJogId(firstJogID);
+    //console.log("firstJogID: "+ firstJogID?.JogDataID)
+  //}
+
   
-  setJogArr(JogObj[0].Jog_Coordinates)
-  return JogObj[0].Jog_Coordinates
+
+  //setJogArr(JogObj[0].Jog_Coordinates)
+  setJogDataArr(JogDataArray)
+  //return JogObj[0].Jog_Coordinates
 };
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {

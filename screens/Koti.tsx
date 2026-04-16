@@ -4,7 +4,7 @@ import { loadUserData } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
 import { UserData } from '../types/database';
 import { LuoProfiiliValikkoModal } from '../components/LuoProfiiliModal';
-import { JogHistory } from '../components/JogHistory';
+//import { JogHistory } from '../components/JogHistory';
 import { jogCoordinates } from '../types/jogCoordinates';
 import { WeightAndJogdata } from '../types/JogData';
 
@@ -47,13 +47,7 @@ export function Koti() {
    <Text> viimeisin lenkki: //lenkki pvm, lenkin pituus//</Text>
    <Text> seuraava salitreeni: //seuraavan salitreeniin pvm//</Text>
 
-   <Pressable onPress={() => JogHistory(db, setJogArr) }>
-                                      <View style={style.container}>
-                                          <Text style={style.text}>
-                                              testi
-                                          </Text>
-                                      </View>
-                                  </Pressable>
+   
    </View>
    );
   }
