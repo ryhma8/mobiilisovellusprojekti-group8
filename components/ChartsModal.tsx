@@ -6,11 +6,11 @@ import { MyChart } from './chart';
 
 const { width, height } = Dimensions.get("window");
 
-export function ChartsModal({ChartsVisible, setChartsVisible, JogDataArr}: KarttaModalProps) {
+export function ChartsModal({ChartsVisible, setChartsVisible, DataArr, Karttamoodi}: KarttaModalProps) {
 
 function resetoiModal()
 {
-    JogDataArr = [] //poistetaan array data jotta tulee uudelleen renderöinti
+    DataArr = [] //poistetaan array data jotta tulee uudelleen renderöinti
     setChartsVisible(false)
 }
 
@@ -21,7 +21,9 @@ function resetoiModal()
         visible={ChartsVisible}>
 
           <View style={styles.modalView}>
-                <MyChart jogDataArr={JogDataArr}>
+                <MyChart 
+                DataArr={DataArr}
+                Karttamoodi={Karttamoodi}>
                 
                 </MyChart>           
             <View style={styles.PressableContainer}>    

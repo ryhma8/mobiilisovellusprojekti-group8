@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import {View, Text, Button, StyleSheet, Dimensions, Pressable} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
@@ -10,6 +10,8 @@ import { UserData, UserWeight } from '../types/database';
 import { Dropdown } from 'react-native-element-dropdown';
 import { ChartsModal } from '../components/ChartsModal';
 import { useSQLiteContext } from 'expo-sqlite';
+import { WeightAndJogdata } from '../types/JogData';
+import { Karttamoodi } from '../types/karttamoodiEnum';
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,7 +40,35 @@ export function Profiili({ route }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [ChartsVisible, setChartsVisible] = useState(false);
   const [userData, setUserData] = useState<UserData[]>([])
-  const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+  const [WeightAndJogdata, setUserWeight] = useState<WeightAndJogdata[]>([])
+  const [karttaMoodi, setKarttamoodi] = useState<Karttamoodi>(Karttamoodi.paino)
+  
+
+  function asetaPainoChartiin()
+  {
+    setKarttamoodi(Karttamoodi.paino)
+    console.log(karttaMoodi)
+    console.log(WeightAndJogdata)
+    setChartsVisible(true)
+  }
+  function asetaLenkitPituusChartiin()
+  {
+    setKarttamoodi(Karttamoodi.pituusAvg)
+    console.log(karttaMoodi)
+    setChartsVisible(true)
+  }
+   function asetaKaloritChartiin()
+  {
+    setKarttamoodi(Karttamoodi.lenkkiCal)
+    console.log(karttaMoodi)
+    setChartsVisible(true)
+  }
+  function asetaLenkkiAikaChartiin()
+  {
+    setKarttamoodi(Karttamoodi.lenkkiAika)
+    console.log(karttaMoodi)
+    setChartsVisible(true)
+  }
 
 return (
       
@@ -61,7 +91,11 @@ return (
                               </View>
 
                               <View style={styles.textRow}>
-                                <Text  style= {styles.text}> paino: </Text>
+                                <Text  style= {styles.text}> Ikä: </Text>
+                              </View>
+
+                              <View style={styles.textRow}>
+                                <Text  style= {styles.text}> Paino: </Text>
                               </View>
                           </View>
 
@@ -78,8 +112,12 @@ return (
                                 <Text  style= {styles.textName}> {userData[0]?.Height_Cm} cm </Text>
                               </View>
 
+                              <View style={styles.textRow}>
+                                <Text  style= {styles.textName}> {userData[0]?.Age} vuotta </Text>
+                              </View>
+
                               <View style={styles.textRow}>                    
-                                <Text  style= {styles.textName}> {UserWeight[0]?.Weight_Kg} kg </Text>
+                                <Text  style= {styles.textName}> {WeightAndJogdata[0]?.Weight_Kg} kg </Text>
                               </View>
                        
                           </View>  
@@ -95,22 +133,37 @@ return (
       <ChartsModal
         ChartsVisible= {ChartsVisible}
         setChartsVisible={setChartsVisible}
-        JogDataArr= {[]}>       
+        DataArr= {WeightAndJogdata} 
+        Karttamoodi= {karttaMoodi}>   
       </ChartsModal> 
 
       <View style={styles.PressableContainer}>
         <Pressable
          style= {styles.Pressable} 
-          onPress={() => setChartsVisible(true)}>
-          <Text style={styles.textClose}>Lenkit 7vrk</Text>
+          onPress={() => asetaKaloritChartiin()}>
+          <Text style={styles.textClose}>poltetut kalorit</Text>
         </Pressable>
 
         <Pressable
          style= {styles.Pressable} 
-          onPress={() => console.log("")}>
+          onPress={() => asetaPainoChartiin()}>
           <Text style={styles.textClose}>Paino</Text>
-        </Pressable>     
-      </View> 
+        </Pressable> 
+
+      </View>
+      <View style={styles.PressableContainer}>
+        <Pressable
+         style= {styles.Pressable} 
+          onPress={() => asetaLenkitPituusChartiin()}>
+          <Text style={styles.textClose}>lenkkien pituus</Text>
+        </Pressable>
+
+        <Pressable
+         style= {styles.Pressable} 
+          onPress={() => asetaLenkkiAikaChartiin()}>
+          <Text style={styles.textClose}>lenkkien ajat</Text>
+        </Pressable>    
+      </View>  
                      
           </View>             
           
@@ -213,7 +266,7 @@ textName:
     flexDirection: 'column',
     alignContent: 'center',
     alignItems: 'center',
-    height: height/1.8
+    height: height/1.5
   },
   textClose: 
   {

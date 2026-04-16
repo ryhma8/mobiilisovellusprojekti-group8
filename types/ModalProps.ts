@@ -1,5 +1,6 @@
 import * as SQLite from 'expo-sqlite';
-import { Jogdata } from './JogData';
+import { WeightAndJogdata } from './JogData';
+import { Karttamoodi } from './karttamoodiEnum';
 
 export type ProfiiliModalProps=
 {
@@ -12,7 +13,8 @@ export type KarttaModalProps=
 {
   ChartsVisible: boolean
   setChartsVisible: (React.Dispatch<React.SetStateAction<boolean>>)
-  JogDataArr: Jogdata[]
+  DataArr: WeightAndJogdata[]
+  Karttamoodi: Karttamoodi
 }
 
 export type LuoProfiiliModalProps=

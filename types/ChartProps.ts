@@ -1,6 +1,8 @@
-import { Jogdata } from "./JogData"
+import { WeightAndJogdata} from "./JogData"
+import { Karttamoodi } from "./karttamoodiEnum"
 
 export type chartProps = 
 {
-  jogDataArr: Jogdata[]
+  DataArr: WeightAndJogdata[]
+  Karttamoodi: Karttamoodi
 }

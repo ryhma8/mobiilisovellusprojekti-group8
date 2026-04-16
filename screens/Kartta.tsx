@@ -5,9 +5,10 @@ import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
 import { leafletHtmlStat } from '../components/leaflet_statcard';
 import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '../mathFunctions/functions'
-import { UserData, UserWeight } from '../types/database';
+import { UserData } from '../types/database';
 import { loadUserData, AddNewJog } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
+import { WeightAndJogdata } from '../types/JogData';
 
 interface coordInterface {
     coords: { lat: number; lng: number; };
@@ -24,7 +25,7 @@ export function Kartta() {
     const db = useSQLiteContext(); //ladataan database
     
     const [userData, setUserData] = useState<UserData[]>([])
-    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
 
     const webviewRef = useRef<WebView | null>(null);
     const statWebviewRef = useRef<WebView | null>(null);

@@ -1,4 +1,4 @@
-export type Jogdata = 
+export type WeightAndJogdata = 
 {
     JogDataID: number
     Avg_Speed: number
@@ -7,5 +7,7 @@ export type Jogdata =
     Time_Minutes: number
     Jog_Coordinates: string
     Jog_Date: string
+    Weight_Kg: number
+    Date: string
 }
 
