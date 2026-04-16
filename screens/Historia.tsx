@@ -6,7 +6,7 @@ import { leafletHtml } from '../components/leaflet';
 import { leafletHtmlStat } from '../components/leaflet_statcard';
 import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '../mathFunctions/functions'
 import { UserData, UserWeight  } from '../types/database';
-import { Jogdata } from '../types/JogData';
+import { WeightAndJogdata } from '../types/JogData';
 import { jogId } from '../types/JogDataId';
 import { jogCoordinates } from '../types/jogCoordinates';
 import { loadUserData, loadJogArr } from '../Database/Database';
@@ -24,15 +24,15 @@ export function Historia() {
     const db = useSQLiteContext(); //ladataan database konstekstista
 
     const [userData, setUserData] = useState<UserData[]>([])
-    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
     //const [JogArr, setJogArr] = useState<jogCoordinates>()
-    const [JogDataArr, setJogDataArr] = useState<Jogdata[]>([])
+    const [JogDataArr, setJogDataArr] = useState<WeightAndJogdata[]>([])
 
     const statWebviewRef = useRef<WebView | null>(null);
     const [coordList, setCoordList] = useState<coordInterface[]>([]);
 
     const [showStats, setShowStats] = useState(false);
-    const [selectedJog, setSelectedJog] = useState<Jogdata>();
+    const [selectedJog, setSelectedJog] = useState<WeightAndJogdata>();
 
     //const [firstJogId, setFirstJogId] = useState<jogId>()
     //const [id, setId] = useState(0);
@@ -61,7 +61,7 @@ export function Historia() {
     }, []);
 
     
-    const openModal = (jog:Jogdata) => {
+    const openModal = (jog:WeightAndJogdata) => {
         setSelectedJog(jog);
         setShowStats(true);
     };
