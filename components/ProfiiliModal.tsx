@@ -51,7 +51,7 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
   else
       {
         alert("Täytä kaikki kentät.") 
-      }
+      } 
   }
 
   return (

@@ -164,8 +164,6 @@ export const loadUserData = async (
       WeightAndJogdata[i].Time_Minutes = UserJogs[i].Time_Minutes
       WeightAndJogdata[i].Jog_Date = UserJogs[i].Jog_Date
     }
-
-    console.log(WeightAndJogdata)
     setUserData(userDataArr)
     setUserWeight(WeightAndJogdata)
   };
