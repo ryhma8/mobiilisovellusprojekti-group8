@@ -1,7 +1,10 @@
 import * as SQLite from 'expo-sqlite';
-import { DbProps, Exercise, UserData, UserWeight } from '../types/database';
-import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
-import { Jogdata } from '../types/JogData';
+import { Exercise, UserData, UserWeight } from '../types/database';
+import { WeightAndJogdata } from '../types/JogData';
+import moment from 'moment';
+import { date } from '../types/Date';
+import { jogId } from '../types/JogDataId';
+import { jogCoordinates } from '../types/jogCoordinates';
 
 
 export async function InitDatabase(db: SQLite.SQLiteDatabase)
@@ -145,14 +148,24 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase)
 export const loadUserData = async (
   database: SQLite.SQLiteDatabase, 
   setUserData: React.Dispatch<React.SetStateAction<UserData[]>>,
-  setUserWeight: React.Dispatch<React.SetStateAction<UserWeight[]>>) => 
+  setUserWeight: React.Dispatch<React.SetStateAction<WeightAndJogdata[]>>) => 
   {
    
-    const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData ORDER BY UserID DESC`);
-    const UserWeight = await database.getAllAsync<UserWeight>(`SELECT * FROM UserWeight ORDER BY UserID DESC`);
-    console.log(userDataArr)
+    const userDataArr = await database.getAllAsync<UserData>(`SELECT * FROM UserData`);
+    let WeightAndJogdata = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM UserWeight ORDER BY UserWeightID DESC LIMIT 7`);
+    const UserJogs = await database.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData ORDER BY JogDataID DESC LIMIT 7`); // order by userweightid, haetaan aina viimeisin käyttäjän paino
+    console.log(UserJogs)
+
+    for(let i = 0; i < WeightAndJogdata.length; i++) //yhdistetään käyttäjän paino ja muu user data
+    {
+      WeightAndJogdata[i].Avg_Speed = UserJogs[i].Avg_Speed
+      WeightAndJogdata[i].Calories_Burned = UserJogs[i].Calories_Burned
+      WeightAndJogdata[i].length_Km = UserJogs[i].length_Km
+      WeightAndJogdata[i].Time_Minutes = UserJogs[i].Time_Minutes
+      WeightAndJogdata[i].Jog_Date = UserJogs[i].Jog_Date
+    }
     setUserData(userDataArr)
-    setUserWeight(UserWeight)
+    setUserWeight(WeightAndJogdata)
   };
 
 const loadUserDataToConsole = async (database: SQLite.SQLiteDatabase) =>
@@ -164,7 +177,7 @@ const loadUserDataToConsole = async (database: SQLite.SQLiteDatabase) =>
 export const AddProfile = async (etuNimi: string, sukuNimi: string, ikä: string, paino: string, pituus: string, database: SQLite.SQLiteDatabase): Promise<SQLite.SQLiteRunResult> => {
     
     const resultData = await database!.runAsync('INSERT INTO UserData (UserID, FirstName, LastName, Age, Height_Cm) VALUES (1,?,?,?,?)', etuNimi, sukuNimi, ikä, pituus)
-    const resultWeight = await database!.runAsync('INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, date())', paino)  
+    const resultWeight = await database!.runAsync("INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?, strftime('%d %m'))", paino)  
 
     console.log(resultData)
     return resultData
@@ -182,19 +195,36 @@ export const AddNewJog = async (fromStartMsToKm: number, calories: number, dista
         
         if (!db) return;
 
-        const minutes = time_seconds / 1000 / 60;
+        const minutes = time_seconds / 1000 / 60;  
+        await db.runAsync("INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,strftime('%d %m'))", fromStartMsToKm, calories, distance, minutes, coordsStringify )
+        const jogDataArrLength = await db.getAllAsync<WeightAndJogdata>(`SELECT * FROM JogData`);
 
-        console.log("cords ", coordsStringify)
-    
-        const resultData = await db.runAsync('INSERT INTO JogData (UserID, Avg_Speed, Calories_Burned, length_Km, Time_Minutes, Jog_Coordinates, Jog_Date) VALUES (1,?,?,?,?,?,date())', fromStartMsToKm, calories, distance, minutes, coordsStringify )
-        //kovakoodataan userid 1, niin ei voi missään tapauksessa muodostua dublikaatti recordeja ja voi olla ainoastaan 1 käyttäjä.
-        console.log("resultData: ",resultData)
+        console.log("coordsstring: "+ coordsStringify)
+        console.log("jogdata length: "+ jogDataArrLength.length)
 
-        const xd = await db.getAllAsync<Jogdata>(`SELECT * FROM JogData`);
-        //console.log("joggi data ", xd[6].Jog_Coordinates)
-
-
+        if(jogDataArrLength.length >= 10)
+          {
+              const latestJogID = await db.getFirstAsync<jogId>(`SELECT JogDataID FROM JogData ORDER By JogDataID`) //haetaan vanhin jogdata id
+              console.log("latestJogID: "+ latestJogID?.JogDataID)
+              if(latestJogID?.JogDataID)
+              {
+              await db.runAsync('DELETE FROM JogData WHERE JogDataID =?', latestJogID.JogDataID) //hävitetään vanhin jog recordi.
+              }
+          }
     };
+
+export const updateProfile = async (ikä: number, pituus: number, Fname:string, Lname:string, database: SQLite.SQLiteDatabase) => {
+    
+    console.log("ikä " + ikä + " " + "pituus " + pituus)
+    const resultData = await database!.runAsync('UPDATE UserData SET Age =?, Height_Cm =?, FirstName =?, LastName =? WHERE UserID =1', ikä, pituus, Fname, Lname)
+    console.log(resultData)
+  };
+
+export const AddNewWeight = async (Weight_Kg: number, database: SQLite.SQLiteDatabase) => 
+  {
+      await database!.runAsync("INSERT INTO UserWeight (UserID, Weight_Kg, Date) VALUES (1,?,strftime('%d %m'))", [Weight_Kg])
+  };
+    
 export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateAction<Exercise[]>>, database: SQLite.SQLiteDatabase | null) => {
   
   console.log("ennen")
@@ -205,16 +235,19 @@ export const loadGymData = async (setgymExerList: React.Dispatch<React.SetStateA
 };
 
 export const loadJogArr = async (
-  setJogArr: React.Dispatch<React.SetStateAction<string[]>>, 
+  setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>, 
   database: SQLite.SQLiteDatabase | null,
-  id:number):Promise<string[] | undefined> => {
+  id:number):Promise<string | undefined> => {
+
   
-  if (!database) return
-  const JogObj = await database.getAllAsync<string>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
-  //console.log("tässä on " +tableData[0].Rest_Time_Minutes.toString())
-  console.log("jogobj[0]: ", JogObj[0])
-  setJogArr(JogObj)
-  return JogObj
+  if (!database) return ""
+  //const JogObjall = await database.getAllAsync<string>(`SELECT * FROM JogData`);
+  const JogObj = await database.getAllAsync<jogCoordinates>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
+  
+  console.log("jogobj: ", JogObj[0].Jog_Coordinates)
+  
+  setJogArr(JogObj[0].Jog_Coordinates)
+  return JogObj[0].Jog_Coordinates
 };
 
 export const AddExercise = async (lepo: string, toisto: string, paino: string, Exec: string, sarja: string, db: SQLite.SQLiteDatabase | null) => {

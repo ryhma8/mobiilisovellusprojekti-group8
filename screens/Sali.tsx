@@ -6,10 +6,11 @@ import { useNavigation } from '@react-navigation/native'
 import { PäiväModal } from '../components/PäiväModal'
 import { loadUserData, purgeDb } from '../Database/Database'
 import * as SQLite from 'expo-sqlite';
-import { UserData, UserWeight } from '../types/database';
+import { UserData } from '../types/database';
 import { TreeniListaModal } from '../components/TreeniListaModal'
 import { LiikeListaModal } from '../components/LiikeListaModal'
 import { useSQLiteContext } from 'expo-sqlite'
+import { WeightAndJogdata } from '../types/JogData'
 
 
 
@@ -30,7 +31,7 @@ export function Sali({ route }: Props) {
 
     //const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
-    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
     
 
 
