@@ -1,4 +1,4 @@
 export type jogId = 
 {
-    JogDataID: number
+    JogDataID: number | undefined
 }

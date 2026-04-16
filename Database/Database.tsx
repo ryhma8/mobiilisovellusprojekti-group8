@@ -247,7 +247,8 @@ export const loadJogArr = async (
   database: SQLite.SQLiteDatabase | null,
   //setJogArr: React.Dispatch<React.SetStateAction<string | undefined>>, 
   setJogDataArr: React.Dispatch<React.SetStateAction<Jogdata[]>>, 
-  id:number):Promise<string | undefined> => {
+  //setFirstJogId: React.Dispatch<React.SetStateAction<jogId | undefined>>,
+  ):Promise<string | undefined> => {
 
   
   if (!database) return ""
@@ -255,8 +256,16 @@ export const loadJogArr = async (
   //const JogObj = await database.getAllAsync<jogCoordinates>(`SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?`, [id]);  //SELECT Jog_Coordinates FROM JogData WHERE JogDataID =?` [id]
   
   //console.log("jogobj: ", JogObj[0].Jog_Coordinates)
-  const JogDataArray = await database.getAllAsync<Jogdata>(`SELECT * FROM JogData WHERE JogDataID =25`);
-  console.log("jog distance arr: ", JogDataArray)
+  const JogDataArray = await database.getAllAsync<Jogdata>(`SELECT * FROM JogData ORDER BY JogDataID DESC LIMIT 10`);
+  //console.log("jog distance arr: ", JogDataArray)
+
+  //const firstJogID = await database.getFirstAsync<jogId>(`SELECT JogDataID FROM JogData ORDER By JogDataID`) //haetaan vanhin jogdata id
+  //if(firstJogID?.JogDataID) {
+    //setFirstJogId(firstJogID);
+    //console.log("firstJogID: "+ firstJogID?.JogDataID)
+  //}
+
+  
 
   //setJogArr(JogObj[0].Jog_Coordinates)
   setJogDataArr(JogDataArray)
