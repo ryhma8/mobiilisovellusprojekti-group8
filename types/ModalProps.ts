@@ -7,6 +7,7 @@ export type ProfiiliModalProps=
   modalVisible: boolean
   setModalVisible: (React.Dispatch<React.SetStateAction<boolean>>)
   db: SQLite.SQLiteDatabase | null
+  setInfogiven: (React.Dispatch<React.SetStateAction<boolean>>)
 }
 
 export type KarttaModalProps=

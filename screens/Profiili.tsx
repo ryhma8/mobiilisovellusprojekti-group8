@@ -2,12 +2,10 @@ import React, { use, useEffect, useState } from 'react';
 import {View, Text, Button, StyleSheet, Dimensions, Pressable} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
-import { MyChart } from '../components/chart';
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
-import { loadUserData, purgeDb } from '../Database/Database';
+import { loadNewestWeight, loadUserData, purgeDb } from '../Database/Database';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { UserData, UserWeight } from '../types/database';
-import { Dropdown } from 'react-native-element-dropdown';
 import { ChartsModal } from '../components/ChartsModal';
 import { useSQLiteContext } from 'expo-sqlite';
 import { WeightAndJogdata } from '../types/JogData';
@@ -33,41 +31,53 @@ export function Profiili({ route }: Props) {
   const db = useSQLiteContext(); //ladataan database konstekstista
 
    useEffect(() => {
-          loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+          loadUserData(db, setUserData, setUserWeight, setJogData) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+          loadNewestWeight(db, setNewestWeight)
           //purgeDb(db)
         }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [ChartsVisible, setChartsVisible] = useState(false);
+  const [ChartsVisibleWeight, setChartsVisibleWeight] = useState(false);
+  const [ChartsVisibleJog, setChartsVisibleJog] = useState(false);
   const [userData, setUserData] = useState<UserData[]>([])
-  const [WeightAndJogdata, setUserWeight] = useState<WeightAndJogdata[]>([])
+  const [Weightdata, setUserWeight] = useState<WeightAndJogdata[]>([])
+  const [NewestWeight, setNewestWeight] = useState<WeightAndJogdata[]>([])
+  const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
   const [karttaMoodi, setKarttamoodi] = useState<Karttamoodi>(Karttamoodi.paino)
+  const [Infogiven, setInfogiven] = useState(false) //refreshiä varten, tällä checkillä saadaan sivu latautumaan uudelleen tietojen asettamisen jälkeen
+  
+     if(Infogiven)
+        {
+          loadUserData(db, setUserData, setUserWeight, setJogData)
+          loadNewestWeight(db, setNewestWeight)
+          setInfogiven(false)
+        }
   
 
   function asetaPainoChartiin()
   {
     setKarttamoodi(Karttamoodi.paino)
     console.log(karttaMoodi)
-    console.log(WeightAndJogdata)
-    setChartsVisible(true)
+    console.log("käyttäjä paino " +JSON.stringify(Weightdata))
+    setChartsVisibleWeight(true)
   }
   function asetaLenkitPituusChartiin()
   {
     setKarttamoodi(Karttamoodi.pituusAvg)
     console.log(karttaMoodi)
-    setChartsVisible(true)
+    setChartsVisibleJog(true)
   }
    function asetaKaloritChartiin()
   {
     setKarttamoodi(Karttamoodi.lenkkiCal)
     console.log(karttaMoodi)
-    setChartsVisible(true)
+    setChartsVisibleJog(true)
   }
   function asetaLenkkiAikaChartiin()
   {
     setKarttamoodi(Karttamoodi.lenkkiAika)
     console.log(karttaMoodi)
-    setChartsVisible(true)
+    setChartsVisibleJog(true)
   }
 
 return (
@@ -117,7 +127,7 @@ return (
                               </View>
 
                               <View style={styles.textRow}>                    
-                                <Text  style= {styles.textName}> {WeightAndJogdata[0]?.Weight_Kg} kg </Text>
+                                <Text  style= {styles.textName}> {NewestWeight[0]?.Weight_Kg} kg </Text>
                               </View>
                        
                           </View>  
@@ -128,14 +138,8 @@ return (
           modalVisible= {modalVisible}
           setModalVisible={setModalVisible}
           db={db}
+          setInfogiven = {setInfogiven}
       ></ProfiiliValikkoModal> 
-
-      <ChartsModal
-        ChartsVisible= {ChartsVisible}
-        setChartsVisible={setChartsVisible}
-        DataArr= {WeightAndJogdata} 
-        Karttamoodi= {karttaMoodi}>   
-      </ChartsModal> 
 
       <View style={styles.PressableContainer}>
         <Pressable
@@ -165,7 +169,19 @@ return (
         </Pressable>    
       </View>  
                      
-          </View>             
+          </View>
+          <ChartsModal
+        ChartsVisible= {ChartsVisibleWeight}
+        setChartsVisible={setChartsVisibleWeight}
+        DataArr= {Weightdata} 
+        Karttamoodi= {karttaMoodi}>   
+      </ChartsModal>
+      <ChartsModal
+        ChartsVisible= {ChartsVisibleJog}
+        setChartsVisible={setChartsVisibleJog}
+        DataArr= {Jogdata} 
+        Karttamoodi= {karttaMoodi}>   
+      </ChartsModal>               
           
       </View>
     );

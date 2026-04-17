@@ -2,12 +2,14 @@ import React, {useState} from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { ProfiiliModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
-import { AddNewWeight, updateProfile } from '../Database/Database';
+import { AddNewWeight, loadUserData, updateProfile } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
+import { UserData } from '../types/database';
+import { WeightAndJogdata } from '../types/JogData';
 
 const { width, height } = Dimensions.get("window");
 
-export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliModalProps) {
+export function ProfiiliValikkoModal({modalVisible, setModalVisible, setInfogiven}: ProfiiliModalProps) {
 
   const db = useSQLiteContext(); //ladataan database konstekstista
   const [ikä, setikä] = useState<string>()
@@ -15,6 +17,10 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
   const [pituus, setPituus] = useState<string>()
   const [etuNimi, setetuNimi] = useState<string>()
   const [sukuNimi, setsukuNimi] = useState<string>()
+
+  const [userData, setUserData] = useState<UserData[]>([])
+  const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+  const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
 
   async function setValues()
   {
@@ -25,6 +31,7 @@ export function ProfiiliValikkoModal({modalVisible, setModalVisible}: ProfiiliMo
       {
         console.log("anw called", paino)
           await AddNewWeight(Number(paino), db)
+          setInfogiven(true)
           setModalVisible(false)
       } catch (error) 
       {
