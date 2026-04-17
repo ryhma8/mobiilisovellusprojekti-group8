@@ -6,6 +6,7 @@ import { RootStackParamList } from './types/navigation';
 import { CustomNavigationBar } from './components/Appbar';
 import { Koti } from './screens/Koti';
 import { Kartta } from './screens/Kartta';
+import { Historia } from './screens/Historia';
 import { Profiili } from './screens/Profiili';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Sali } from './screens/Sali';
@@ -35,6 +36,7 @@ export default function App() {
         <Stack.Screen name="Kartta" component={Kartta} />
         <Stack.Screen name="Profiili" component={Profiili}  />
         <Stack.Screen name="Sali" component={Sali} />
+        <Stack.Screen name="Historia" component={Historia} />
       </Stack.Navigator>
       </SafeAreaView>
     </NavigationContainer>

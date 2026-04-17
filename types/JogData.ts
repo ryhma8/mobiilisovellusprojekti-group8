@@ -1,5 +1,6 @@
 export type WeightAndJogdata = 
 {
+    JogDataID: number
     Avg_Speed: number
     Calories_Burned: number 
     length_Km: number

@@ -9,5 +9,6 @@ Kartta: undefined
 Profiili: undefined
 Sali: undefined
 Ohjelma: undefined
+Historia: undefined
 };
 
