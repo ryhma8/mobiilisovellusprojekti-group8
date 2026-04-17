@@ -22,17 +22,18 @@ export function Koti() {
   const [jogArr, setJogArr] = useState<string | undefined>()
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+  const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
   const [modalVisible, setModalVisible] = useState(true);// jos ei käyttäjää niin forcetetaan modali auki.
   const [Infogiven, setInfogiven] = useState(false) //refreshiä varten, tällä checkillä saadaan sivu latautumaan uudelleen tietojen asettamisen jälkeen
 
    if(Infogiven)
       {
-        loadUserData(db, setUserData, setUserWeight)
+        loadUserData(db, setUserData, setUserWeight, setJogData)
         setInfogiven(false)
       }
 
   useEffect(() => {
-            loadUserData(db, setUserData, setUserWeight)
+            loadUserData(db, setUserData, setUserWeight, setJogData)
           }, []);
 
         

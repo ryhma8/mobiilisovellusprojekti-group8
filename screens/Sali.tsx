@@ -22,7 +22,7 @@ export function Sali({ route }: Props) {
     const db = useSQLiteContext(); //ladataan database konstekstista
     
     useEffect(() => {
-        loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+        loadUserData(db, setUserData, setUserWeight,setJogData) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
         //purgeDb(db)
     }, []);
     const [modalVisibleLiikeLista, setModalVisibleLiikeLista] = useState(false);
@@ -32,6 +32,7 @@ export function Sali({ route }: Props) {
     //const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+    const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
     
 
 

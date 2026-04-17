@@ -26,6 +26,7 @@ export function Kartta() {
     
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+     const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
 
     const webviewRef = useRef<WebView | null>(null);
     const statWebviewRef = useRef<WebView | null>(null);
@@ -57,7 +58,7 @@ export function Kartta() {
     }, []);
 
     useEffect(() => {
-              loadUserData(db, setUserData, setUserWeight) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
+              loadUserData(db, setUserData, setUserWeight, setJogData) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
             }, []);
 
     useEffect(() => {
