@@ -25,6 +25,7 @@ export function Historia() {
 
     const [userData, setUserData] = useState<UserData[]>([])
     const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+    const [JogData, setJogData] = useState<WeightAndJogdata[]>([])
     //const [JogArr, setJogArr] = useState<jogCoordinates>()
     const [JogDataArr, setJogDataArr] = useState<WeightAndJogdata[]>([])
 
@@ -43,7 +44,7 @@ export function Historia() {
     const[date, setDate] = useState("");*/
         
     useEffect(() => {
-        loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+        loadUserData(db, setUserData, setUserWeight, setJogData) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
         loadJogArr(db, setJogDataArr)
 
         console.log("coords historia sivulla: ", JogDataArr)

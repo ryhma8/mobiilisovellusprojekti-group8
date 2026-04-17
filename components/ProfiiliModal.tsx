@@ -162,7 +162,8 @@ const styles = StyleSheet.create({
   {
     backgroundColor: '#ffffff',
     borderRadius: 10,
-    width: width/1.4
+    width: width/1.4,
+    color: "#000000"
   },
   containerAsButton: 
   {
