@@ -38,7 +38,7 @@ export default function TreeniCard({ item, TrainDataID, SetTrainToDay, toggleSel
                     styles.liike,
                     selected && styles.selectedLiike]}
             >
-                <Text style={styles.liikeText}> name {item.TrainName},id: {item.TrainDataID}, ex1 {item.Exer1}, ex2 {item.Exer2}</Text>
+                <Text style={styles.liikeText}>{item.TrainName}</Text>
             </TouchableOpacity>
         </View>
     )

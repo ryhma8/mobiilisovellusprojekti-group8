@@ -23,20 +23,40 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
         if (refresh) {
             setRefresh(false)
         }
-     console.log("aaa ", trainForDays),
+        console.log("useef alussa ", trainForDays)
+
+        // console.log("ennen tyhjennystä ", trainForDays)
+        //console.log("kaikki treenit, ", gymTrainList)
+        //console.log("tyhjennyksen jölkeen ", trainForDays)
 
         loadTrainData(setGymTrainList, db)
         loadDayData(setTrainForDays, db)
+        console.log("lopulta ", trainForDays)
+
     }, [refresh])
+
+    const trainMap = Object.fromEntries(
+        gymTrainList.map(train => [train.TrainDataID, train.TrainName])
+    );
+    const result = trainForDays.map(day => ({
+        ...day,
+        TrainName: trainMap[day.TrainNumber]
+    }));
+
+    function consolelogs() {
+        console.log("trainlist: ", gymTrainList)
+        console.log("trainfordays: ", trainForDays)
+    }
+    function deletearray() {
+        setTrainForDays([])
+    }
 
     function addTraintoDay() {
         AddTrainingToDay(selectedDay, selectedTraining, db)
         setSelectedDay(0)
         setSelectedTraining(0)
     }
-    const trainmap=new Map()
-
-    trainmap.set(selectedDay,1)
+    
 
     return (
         <View>
@@ -45,46 +65,66 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(1)]}>
 
                 <Text style={styles.päivä}>Ma</Text>
-                <Text style={styles.päiväbox}>{trainForDays[6]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[6]?.TrainName}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(2)]}>
 
                 <Text style={styles.päivä}>Ti</Text>
-                <Text style={styles.päiväbox}>{trainForDays[5]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[5]?.TrainName}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(3)]}>
 
                 <Text style={styles.päivä}>Ke</Text>
-                <Text style={styles.päiväbox}>{trainForDays[4]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[4]?.TrainName}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(4)]}>
 
                 <Text style={styles.päivä}>To</Text>
-                <Text style={styles.päiväbox}>{trainForDays[3]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[3]?.TrainName}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(5)]}>
 
                 <Text style={styles.päivä}>Pe</Text>
-                <Text style={styles.päiväbox}>{trainForDays[2]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[2]?.TrainName}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(6)]}>
 
                 <Text style={styles.päivä}>La</Text>
-                <Text style={styles.päiväbox}>{trainForDays[1]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[1]?.TrainName}
+                </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(7)]}>
 
                 <Text style={styles.päivä}>Su</Text>
-                <Text style={styles.päiväbox}>{trainForDays[0]?.TrainNumber}</Text>
+                <Text style={styles.päiväbox}>
+                    {result[0]?.TrainName}
+                </Text>
             </TouchableOpacity>
-
-
+            <Pressable
+                onPress={() => consolelogs()}>
+                <Text style={styles.modalNappi}>Sulje</Text>
+            </Pressable>
+            <Pressable
+                onPress={() => deletearray()}>
+                <Text style={styles.modalNappi}>delete</Text>
+            </Pressable>
             <Modal
                 animationType="slide"
                 visible={modalVisiblepv}>
@@ -137,6 +177,7 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
                             ]}>
                             <Text style={styles.modalNappi}>Sulje</Text>
                         </Pressable>
+
 
 
                     </View>

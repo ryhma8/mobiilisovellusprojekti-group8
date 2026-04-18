@@ -16,10 +16,18 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
     const [gymTrainList, setGymTrainList] = useState<Training[]>([])
     const [selectedTraining, setSelectedTraining] = useState<Training | null>(null);
     const [modalTraining, setModalTraining] = useState(false);
+    const [gymExerList, setgymExerList] = useState<Exercise[]>([])
+
+    const exerciseMap = Object.fromEntries(
+        gymExerList.map(e => [e.GymDataID, e.Exercise_Type])
+    );
+
 
     const numerotest = 1
 
     useEffect(() => {
+        loadGymData(setgymExerList, db)
+
         loadTrainData(setGymTrainList, db)
     }, [])
 
@@ -42,36 +50,81 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
                     <FlatList
                         data={gymTrainList}
                         keyExtractor={(item) => item.TrainDataID.toString()}
-                        renderItem={({ item }) =>
-                            <TreeniCard
-                                item={item}
-                                TrainDataID={item.TrainDataID}
-                                OnPress={() => {
-                                    setSelectedTraining(item);
-                                    setModalTraining(true);
-                                }}
-                            />
-                        }
+                        renderItem={({ item }) => (
+                            <View>
+                                <TreeniCard
+                                    item={item}
+                                    TrainDataID={item.TrainDataID}
+                                    OnPress={() => {
+                                        setSelectedTraining(item);
+                                        setModalTraining(true);
+                                    }}
+                                />
+                            </View>
+                        )}
                         style=""
                     />
+
                     <Modal
                         animationType="slide"
                         visible={modalTraining}
                     >
                         <View style={styles.ohjelmaModal}>
+                            <Pressable
+                                onPress={() => (console.log("exerlist ", exerciseMap))}>
+                                <Text style={styles.modalNappi}>Sulje</Text>
+                            </Pressable>
                             <Text>Train Name: {selectedTraining?.TrainName}</Text>
-                            
-                            {selectedTraining?.Exec1 && (<Text>{selectedTraining.Exec1}</Text>)}
-                            {selectedTraining?.Exec2 && (<Text>{selectedTraining.Exec2}</Text>)}
-                            {selectedTraining?.Exec3 && (<Text>{selectedTraining.Exec3}</Text>)}
-                            {selectedTraining?.Exec4 && (<Text>{selectedTraining.Exec4}</Text>)}
-                            {selectedTraining?.Exec5 && (<Text>{selectedTraining.Exec5}</Text>)}
-                            {selectedTraining?.Exec6 && (<Text>{selectedTraining.Exec6}</Text>)}
-                            {selectedTraining?.Exec7 && (<Text>{selectedTraining.Exec7}</Text>)}
-                            {selectedTraining?.Exec8 && (<Text>{selectedTraining.Exec8}</Text>)}
-                            {selectedTraining?.Exec9 && (<Text>{selectedTraining.Exec9}</Text>)}
-                            {selectedTraining?.Exec10 && (<Text>{selectedTraining.Exec10}</Text>)}
-
+                            {selectedTraining?.Exec1 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec1)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec2 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec2)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec3 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec3)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec4 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec4)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec5 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec5)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec6 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec6)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec7 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec7)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec8 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec8)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec9 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec9)]}
+                                </Text>
+                            )}
+                            {selectedTraining?.Exec10 && (
+                                <Text>
+                                    {exerciseMap[Number(selectedTraining.Exec10)]}
+                                </Text>
+                            )}
                         </View>
                         <Pressable
                             onPress={() => { setModalTraining(false) }}>
@@ -137,5 +190,10 @@ const styles = StyleSheet.create({
     ohjelmaModal: {
         backgroundColor: '#9F6BFB',
         flex: 1
+    },
+    exerciseText: {
+        paddingLeft: 10,
+        paddingBottom: 10,
+        color: '#fff'
     }
 });

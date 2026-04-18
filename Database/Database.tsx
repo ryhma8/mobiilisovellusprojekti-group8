@@ -59,19 +59,27 @@ export async function InitDatabase(db: SQLite.SQLiteDatabase) {
         );
         
         CREATE TABLE IF NOT EXISTS TrainDay (
-        TrainDayID INTEGER PRIMARY KEY AUTOINCREMENT,
+        Day INTEGER PRIMARY KEY,
         UserID INTEGER NOT NULL,
-        Day INTEGER,
         TrainNumber INTEGER,
         FOREIGN KEY(UserID) REFERENCES UserData(UserID) ON DELETE CASCADE
         );  
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 1, 0);
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 2, 0);
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 3, 0);
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 4, 0);
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 5, 0);
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 6, 0);
-        INSERT INTO TrainDay (UserID, Day, TrainNumber) VALUES (1, 7, 0);
+
+        -- Insert only if no records exist in TrainDay
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 1, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 1);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 2, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 2);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 3, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 3);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 4, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 4);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 5, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 5);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 6, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 6);
+        INSERT INTO TrainDay (UserID, Day, TrainNumber)
+        SELECT 1, 7, 0 WHERE NOT EXISTS (SELECT 1 FROM TrainDay WHERE UserID = 1 AND Day = 7);
       `);
   };
 
@@ -121,13 +129,14 @@ export const purgeDb = async (database: SQLite.SQLiteDatabase | null) => {
 export const AddTrainingToDay = async (day: number, trainNumber: number, db: SQLite.SQLiteDatabase | null) => {
   if (!db) return;
   console.log("Add trainign : ", { day, trainNumber });
+ 
   const xs = await db.runAsync('UPDATE TrainDay set UserID=1, TrainNumber=? WHERE Day=? ', [trainNumber, day]);
 };
 export const loadDayData = async (setTrainForDays: React.Dispatch<React.SetStateAction<TrainDay[]>>, database: SQLite.SQLiteDatabase | null) => {
 
   console.log("ennen")
   if (!database) return
-  const tableData = await database.getAllAsync<TrainDay>(`SELECT * FROM TrainDay ORDER BY TrainDayID DESC`);
+  const tableData = await database.getAllAsync<TrainDay>(`SELECT * FROM TrainDay ORDER BY Day DESC`);
   console.log("päviä " + tableData[0].Day, "trainnum " + tableData[0].TrainNumber)
   setTrainForDays(tableData)
 };
