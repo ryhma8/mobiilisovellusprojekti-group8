@@ -44,6 +44,7 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
         : [];
 
         function deleteTrain(){
+            console.log("inside call")
             deleteTraining(toBeDeleted,db)
         }
     return (
@@ -98,7 +99,8 @@ export function TreeniListaModal({ modalVisibleTreeniLista, setModalVisibleTreen
                                     <Text style={styles.modalNappi}>Sulje</Text>
                                 </Pressable>
                                 <Pressable onPress={() => [console.log("selected: ",toBeDeleted),
-                                    deleteTrain
+                                    deleteTrain(),
+                                    setModalTraining(false)
                                 ]}>
                                     <Text style={styles.modalNappi}>Poista </Text>
                                 </Pressable>

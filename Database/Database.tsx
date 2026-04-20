@@ -142,6 +142,7 @@ export const loadDayData = async (setTrainForDays: React.Dispatch<React.SetState
 export const deleteTraining = async (selectedTraining:number, database: SQLite.SQLiteDatabase | null) => {
 
   if (!database) return
+  console.log("delete id: ",selectedTraining)
   await database.runAsync(`DELETE FROM TrainData WHERE TrainDataID =?`,selectedTraining);
 };
 export const deleteExercise = async (selectedExercise:number, database: SQLite.SQLiteDatabase | null) => {
