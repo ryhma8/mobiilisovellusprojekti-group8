@@ -1,19 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button } from 'react-native';
 import { LiikeModalProps } from '../types/ModalProps';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
-import { AddExercise } from '../Database/Database';
+import { AddExercise, loadGymData } from '../Database/Database';
+import { Exercise } from '../types/database';
 
 const { width, height } = Dimensions.get("window");
 
-export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike, db }: LiikeModalProps) {
+export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike,db }: LiikeModalProps) {
     const [liike, setLiike] = useState('')
-    const [paino, setPaino] = useState('')
-    const [toisto, setToisto] = useState('')
-    const [sarja, setSarja] = useState('')
-    const [lepo, setLepo] = useState('')
+    const [paino, setPaino] = useState('0')
+    const [toisto, setToisto] = useState('1')
+    const [sarja, setSarja] = useState('1')
+    const [lepo, setLepo] = useState('0')
+    const [refresh, setRefresh]= useState(false)
+    const [gymExerList, setgymExerList] = useState<Exercise[]>([])
+    
+    useEffect(() => {
+            if(refresh){
+                setRefresh(false)
+            }
+            console.log("refredddsh")
+            loadGymData(setgymExerList, db)
+            console.log("gymdata;",gymExerList)
+        }, [refresh])
     
     function addMove() {
+        console.log("add ")
         AddExercise(lepo,toisto,paino,liike,sarja,db)
         setModalVisibleLiike(false)
     }
@@ -88,7 +101,7 @@ export function LiikeModal({ modalVisibleLiike, setModalVisibleLiike, db }: Liik
                     <View style={styles.modalNappiRivi}>
                         <Pressable
 
-                            onPress={addMove}>
+                            onPress={()=>{addMove(), setRefresh(true)}}>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 

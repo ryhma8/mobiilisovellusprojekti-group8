@@ -3,17 +3,32 @@ import React, { useEffect, useState } from 'react'
 import { TreeniModalProps } from '../types/ModalProps'
 import { Modal } from 'react-native';
 import { Exercise } from '../types/database';
-import LiikeCard from './LiikeCard';
-import { loadGymData } from '../Database/Database';
+import { AddExercise, AddTraining, loadGymData } from '../Database/Database';
+import ExerciseCard from './ExerciseCard';
 
 export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: TreeniModalProps) {
 
     const [gymExerList, setgymExerList] = useState<Exercise[]>([])
     const [trainName, setTrainName] = useState('')
+    const [select, setSelect] = useState<string[]>([])
+    const [refresh, setRefresh] = useState(false)
 
     useEffect(() => {
+        if(refresh){
+            setRefresh(false)
+        }
+        console.log("refredddsh")
         loadGymData(setgymExerList, db)
-    }, [])
+        console.log("gymdata;",gymExerList)
+    }, [refresh])
+
+    function addTraining(){
+        console.log("ss")
+        AddTraining(trainName,select[0],select[1],select[2],select[3],select[4],select[5],select[6],select[7],select[8],select[9],db)
+        setSelect([])
+        setTrainName('')
+
+    }
 
     return (
         <View>
@@ -39,18 +54,34 @@ export function TreeniModal({ modalVisibleTreeni, setModalVisibleTreeni, db }: T
                     <FlatList
                         data={gymExerList}
                         keyExtractor={(item) => item.GymDataID.toString()}
-                        renderItem={({ item }) => <LiikeCard item={item} GymDataID={item.GymDataID} />}
+                        renderItem={({ item }) =>
+                            <ExerciseCard
+                                exercise={item}
+                                toggleSelect={(id) => {
+                                    setSelect((prevSelect) => {
+                                        if (prevSelect.includes(id)) {
+                                            return prevSelect.filter((item) => item !== id);
+                                        } else {
+                                            return [...prevSelect, id];
+                                        }
+                                    }
+                                    )
+                                }}
+                                selected={select.includes(item.GymDataID)}
+
+                            />}
                         style=""
                     />
-
+                    <Text>{select}</Text>
                     <View style={styles.modalNappiRivi}>
 
                         <Pressable
-                            onPress={() => setModalVisibleTreeni(false)}>
+                            onPress={() => [ setSelect([]), setModalVisibleTreeni(false), setRefresh(true) ]}>
                             <Text style={styles.modalNapit}>Sulje</Text>
                         </Pressable>
+                        
                         <Pressable
-                            onPress={() => setModalVisibleTreeni(false)}>
+                            onPress={() => [addTraining(), setRefresh(true), setModalVisibleTreeni(false)] }>
                             <Text style={styles.modalNapit}>Tallenna</Text>
                         </Pressable>
 
@@ -104,7 +135,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     input: {
-        backgroundColor:'white',
+        backgroundColor: 'white',
         height: 40,
         margin: 12,
         borderWidth: 1,
