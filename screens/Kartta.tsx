@@ -249,12 +249,12 @@ export function Kartta() {
             <Pressable onPress={() => setSpdText(prev => !prev ) }>
                 <View style={styles.numberContainer}>
                     <Text style={styles.teksti}>
-                        {spdText ? `Keskinopeus alusta: ${fromStartMsToKm} km/h` : `Keskinopeus: ${msToKm} km/h`}
+                        {spdText ? `Keskinopeus (kokonais): ${fromStartMsToKm.toFixed(2)} km/h` : `Keskinopeus (nykyinen): ${msToKm.toFixed(2)} km/h`}
                     </Text>
                 </View>
             </Pressable>
             <View style={styles.numberContainerBottom}>
-                <Text style={styles.teksti}>Matka: {distance} km</Text>
+                <Text style={styles.teksti}>Matka: {distance.toFixed(2)} km</Text>
             </View>
             <WebView
                 ref={webviewRef}
@@ -284,13 +284,13 @@ export function Kartta() {
                         </View>
 
                         <Text style={styles.statCardText}>Matka: {distance.toFixed(2)} km</Text>
-                        <Text style={styles.statCardText}>Keskinopeus alusta: {fromStartMsToKm.toFixed(2)} km/h</Text>
+                        <Text style={styles.statCardText}>Keskinopeus (kokonais): {fromStartMsToKm.toFixed(2)} km/h</Text>
                         <Text style={styles.statCardText}>Aika: {formatTime(trackedJog.at(-1)?.time ?? 0)}</Text>
                         <Text style={styles.statCardText}>Kaloreita kulutettu: {calories.toFixed(0)}</Text>
 
                         <View style={{ flexDirection:"row", justifyContent: "space-between", width: "100%", }}>
                             <Pressable
-                                onPress={() => AddNewJog(fromStartMsToKm, calories, distance, trackedJog.at(-1)?.time ?? 0, JSON.stringify(databaseCoords) ,db) }
+                                onPress={() => [AddNewJog(fromStartMsToKm, calories, distance, trackedJog.at(-1)?.time ?? 0, JSON.stringify(databaseCoords) ,db), setShowStats(false)]}
                                 style={styles.statcardButton}
                             >
                                 <Text style={styles.statcardButtonText}>Tallenna</Text>
