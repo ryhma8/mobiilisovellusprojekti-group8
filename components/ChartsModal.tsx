@@ -3,14 +3,19 @@ import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button
 import { KarttaModalProps } from '../types/ModalProps'; 
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { MyChart } from './chart';
+import { WeightAndJogdata } from '../types/JogData';
+import { UserData } from '../types/database';
+import { loadUserData } from '../Database/Database';
+import { useSQLiteContext } from 'expo-sqlite';
 
 const { width, height } = Dimensions.get("window");
 
-export function ChartsModal({ChartsVisible, setChartsVisible, JogDataArr}: KarttaModalProps) {
+export function ChartsModal({ChartsVisible, setChartsVisible, DataArr, Karttamoodi}: KarttaModalProps) {
+
+  const db = useSQLiteContext(); //ladataan database
 
 function resetoiModal()
 {
-    JogDataArr = [] //poistetaan array data jotta tulee uudelleen renderöinti
     setChartsVisible(false)
 }
 
@@ -21,7 +26,9 @@ function resetoiModal()
         visible={ChartsVisible}>
 
           <View style={styles.modalView}>
-                <MyChart jogDataArr={JogDataArr}>
+                <MyChart 
+                DataArr={DataArr}
+                Karttamoodi={Karttamoodi}>
                 
                 </MyChart>           
             <View style={styles.PressableContainer}>    

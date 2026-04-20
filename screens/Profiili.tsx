@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import {View, Text, Button, StyleSheet, Dimensions, Pressable} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
-import { MyChart } from '../components/chart';
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
-import { loadUserData, purgeDb } from '../Database/Database';
+import { loadNewestWeight, loadUserData, purgeDb } from '../Database/Database';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { UserData, UserWeight } from '../types/database';
-import { Dropdown } from 'react-native-element-dropdown';
 import { ChartsModal } from '../components/ChartsModal';
 import { useSQLiteContext } from 'expo-sqlite';
+import { WeightAndJogdata } from '../types/JogData';
+import { Karttamoodi } from '../types/karttamoodiEnum';
 
 const { width, height } = Dimensions.get("window");
 
@@ -24,55 +24,6 @@ const sivut = [
     { label: 'Profliili', value: 'Profiili' },
   ];
 
-    const testiObjekti = 
-{
-    Time: 60,
-    distanceJogged: 11,
-    date: "14/01/2025"
-}
-const dummyData = 
-[
-
-]
-const dummyData2 = 
-[
-  {
-    Time: 55,
-    distanceJogged: 9,
-    date: "10/01/2025"
-  },
-  {
-    Time: 67,
-    distanceJogged: 10,
-    date: "11/01/2025"
-  },
-   {
-    Time: 56,
-    distanceJogged: 12,
-    date: "12/01/2025"
-  },
-  {
-    Time: 60,
-    distanceJogged: 11,
-    date: "13/01/2025"
-  },
-  
-   {
-    Time: 56,
-    distanceJogged: 12,
-    date: "15/01/2025"
-  },
-  {
-    Time: 71,
-    distanceJogged: 11,
-    date: "17/01/2025"
-  },
-  {
-    Time: 66,
-    distanceJogged: 11,
-    date: "19/01/2025"
-  },
-]
 
 
 export function Profiili({ route }: Props) {
@@ -80,14 +31,54 @@ export function Profiili({ route }: Props) {
   const db = useSQLiteContext(); //ladataan database konstekstista
 
    useEffect(() => {
-          loadUserData(db, setUserData, setUserWeight) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+          loadUserData(db, setUserData, setUserWeight, setJogData) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
+          loadNewestWeight(db, setNewestWeight)
           //purgeDb(db)
         }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
-  const [ChartsVisible, setChartsVisible] = useState(false);
+  const [ChartsVisibleWeight, setChartsVisibleWeight] = useState(false);
+  const [ChartsVisibleJog, setChartsVisibleJog] = useState(false);
   const [userData, setUserData] = useState<UserData[]>([])
-  const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+  const [Weightdata, setUserWeight] = useState<WeightAndJogdata[]>([])
+  const [NewestWeight, setNewestWeight] = useState<WeightAndJogdata[]>([])
+  const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
+  const [karttaMoodi, setKarttamoodi] = useState<Karttamoodi>(Karttamoodi.paino)
+  const [Infogiven, setInfogiven] = useState(false) //refreshiä varten, tällä checkillä saadaan sivu latautumaan uudelleen tietojen asettamisen jälkeen
+  
+     if(Infogiven)
+        {
+          loadUserData(db, setUserData, setUserWeight, setJogData)
+          loadNewestWeight(db, setNewestWeight)
+          setInfogiven(false)
+        }
+  
+
+  function asetaPainoChartiin()
+  {
+    setKarttamoodi(Karttamoodi.paino)
+    console.log(karttaMoodi)
+    console.log("käyttäjä paino " +JSON.stringify(Weightdata))
+    setChartsVisibleWeight(true)
+  }
+  function asetaLenkitPituusChartiin()
+  {
+    setKarttamoodi(Karttamoodi.pituusAvg)
+    console.log(karttaMoodi)
+    setChartsVisibleJog(true)
+  }
+   function asetaKaloritChartiin()
+  {
+    setKarttamoodi(Karttamoodi.lenkkiCal)
+    console.log(karttaMoodi)
+    setChartsVisibleJog(true)
+  }
+  function asetaLenkkiAikaChartiin()
+  {
+    setKarttamoodi(Karttamoodi.lenkkiAika)
+    console.log(karttaMoodi)
+    setChartsVisibleJog(true)
+  }
 
 return (
       
@@ -110,7 +101,11 @@ return (
                               </View>
 
                               <View style={styles.textRow}>
-                                <Text  style= {styles.text}> paino: </Text>
+                                <Text  style= {styles.text}> Ikä: </Text>
+                              </View>
+
+                              <View style={styles.textRow}>
+                                <Text  style= {styles.text}> Paino: </Text>
                               </View>
                           </View>
 
@@ -127,8 +122,12 @@ return (
                                 <Text  style= {styles.textName}> {userData[0]?.Height_Cm} cm </Text>
                               </View>
 
+                              <View style={styles.textRow}>
+                                <Text  style= {styles.textName}> {userData[0]?.Age} vuotta </Text>
+                              </View>
+
                               <View style={styles.textRow}>                    
-                                <Text  style= {styles.textName}> {UserWeight[0]?.Weight_Kg} kg </Text>
+                                <Text  style= {styles.textName}> {NewestWeight[0]?.Weight_Kg} kg </Text>
                               </View>
                        
                           </View>  
@@ -139,29 +138,50 @@ return (
           modalVisible= {modalVisible}
           setModalVisible={setModalVisible}
           db={db}
+          setInfogiven = {setInfogiven}
       ></ProfiiliValikkoModal> 
-
-      <ChartsModal
-        ChartsVisible= {ChartsVisible}
-        setChartsVisible={setChartsVisible}
-        JogDataArr= {dummyData2}>       
-      </ChartsModal> 
 
       <View style={styles.PressableContainer}>
         <Pressable
          style= {styles.Pressable} 
-          onPress={() => setChartsVisible(true)}>
-          <Text style={styles.textClose}>Lenkit 7vrk</Text>
+          onPress={() => asetaKaloritChartiin()}>
+          <Text style={styles.textClose}>poltetut kalorit</Text>
         </Pressable>
 
         <Pressable
          style= {styles.Pressable} 
-          onPress={() => console.log("")}>
+          onPress={() => asetaPainoChartiin()}>
           <Text style={styles.textClose}>Paino</Text>
-        </Pressable>     
-      </View> 
+        </Pressable> 
+
+      </View>
+      <View style={styles.PressableContainer}>
+        <Pressable
+         style= {styles.Pressable} 
+          onPress={() => asetaLenkitPituusChartiin()}>
+          <Text style={styles.textClose}>lenkkien pituus</Text>
+        </Pressable>
+
+        <Pressable
+         style= {styles.Pressable} 
+          onPress={() => asetaLenkkiAikaChartiin()}>
+          <Text style={styles.textClose}>lenkkien ajat</Text>
+        </Pressable>    
+      </View>  
                      
-          </View>             
+          </View>
+          <ChartsModal
+        ChartsVisible= {ChartsVisibleWeight}
+        setChartsVisible={setChartsVisibleWeight}
+        DataArr= {Weightdata} 
+        Karttamoodi= {karttaMoodi}>   
+      </ChartsModal>
+      <ChartsModal
+        ChartsVisible= {ChartsVisibleJog}
+        setChartsVisible={setChartsVisibleJog}
+        DataArr= {Jogdata} 
+        Karttamoodi= {karttaMoodi}>   
+      </ChartsModal>               
           
       </View>
     );
@@ -262,7 +282,7 @@ textName:
     flexDirection: 'column',
     alignContent: 'center',
     alignItems: 'center',
-    height: height/1.8
+    height: height/1.5
   },
   textClose: 
   {

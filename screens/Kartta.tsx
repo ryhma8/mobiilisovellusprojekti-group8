@@ -5,20 +5,19 @@ import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
 import { leafletHtmlStat } from '../components/leaflet_statcard';
 import { laskeAvgNopeus, LaskeMatkaKoordinaateista, laskeLenkinKalorit } from '../mathFunctions/functions'
-import { center } from '@shopify/react-native-skia';
-import { UserData, UserWeight } from '../types/database';
-import * as SQLite from 'expo-sqlite';
+import { UserData } from '../types/database';
 import { loadUserData, AddNewJog } from '../Database/Database';
 import { useSQLiteContext } from 'expo-sqlite';
+import { WeightAndJogdata } from '../types/JogData';
 
 interface coordInterface {
     coords: { lat: number; lng: number; };
     time: number;
 }
 
-type coords = {
-    lat: number
-    lng: number
+interface coords {
+    lat: number;
+    lng: number;
 }
 
 export function Kartta() {
@@ -26,13 +25,16 @@ export function Kartta() {
     const db = useSQLiteContext(); //ladataan database
     
     const [userData, setUserData] = useState<UserData[]>([])
-    const [UserWeight, setUserWeight] = useState<UserWeight[]>([])
+    const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
+     const [Jogdata, setJogData] = useState<WeightAndJogdata[]>([])
 
     const webviewRef = useRef<WebView | null>(null);
     const statWebviewRef = useRef<WebView | null>(null);
     const trackingRef = useRef<number | null>(null);
     const [coordList, setCoordList] = useState<coordInterface[]>([]);
+    const [coordsForDb, setCoordsForDb] = useState<coords[]>([])
     const [trackedJog, setTrackedJog] = useState<coordInterface[]>([]);
+    const [databaseCoords, setDatabaseCoords] = useState<coords[]>([])
     const [distance, setDistance] = useState<number>(0);
     const [fromStartAvgSpd, setFromStartAvgSpd] = useState<number>(0);
     const [avgSpd, setAvgSpd] = useState<number>(0);
@@ -56,8 +58,7 @@ export function Kartta() {
     }, []);
 
     useEffect(() => {
-              loadUserData(db, setUserData, setUserWeight) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
-              //purgeDb(db)
+              loadUserData(db, setUserData, setUserWeight, setJogData) // useeffectilla ladataan db, eli tietokanta usetstate muuttujaan
             }, []);
 
     useEffect(() => {
@@ -160,6 +161,12 @@ export function Kartta() {
                 } 
             ]);
 
+            setCoordsForDb(prev => [...prev, 
+                
+                coords
+                 
+            ]);
+
 
             webviewRef.current?.postMessage(JSON.stringify(coords));
             
@@ -197,6 +204,7 @@ export function Kartta() {
             stopTime();
             
             setTrackedJog(coordList);
+            setDatabaseCoords(coordsForDb);
 
             setShowStats(true);
 
@@ -208,6 +216,7 @@ export function Kartta() {
             }, 300)
 
             setCoordList([]);
+            setCoordsForDb([]);
         }
     }, [sendLocationToWebView, coordList]);
 
@@ -226,14 +235,12 @@ export function Kartta() {
         let hours = Math.floor(ms / (1000 * 60 * 60));
         let minutes = Math.floor(ms / (1000 * 60) % 60);
         let seconds = Math.floor(ms / (1000) % 60);
-        let milliseconds = Math.floor((ms % 1000) / 10);
 
         const hoursString = String(hours).padStart(2, "0");
         const minutesString = String(minutes).padStart(2, "0");
         const secondsString = String(seconds).padStart(2, "0");
-        const millisecondsString = String(milliseconds).padStart(2, "0");
 
-        return `${hoursString}:${minutesString}:${secondsString}.${millisecondsString}`
+        return `${hoursString}:${minutesString}:${secondsString}`
     }
 
 
@@ -283,7 +290,7 @@ export function Kartta() {
 
                         <View style={{ flexDirection:"row", justifyContent: "space-between", width: "100%", }}>
                             <Pressable
-                                onPress={() => AddNewJog(fromStartMsToKm, calories, distance, trackedJog.at(-1)?.time ?? 0, db) }
+                                onPress={() => AddNewJog(fromStartMsToKm, calories, distance, trackedJog.at(-1)?.time ?? 0, JSON.stringify(databaseCoords) ,db) }
                                 style={styles.statcardButton}
                             >
                                 <Text style={styles.statcardButtonText}>Tallenna</Text>

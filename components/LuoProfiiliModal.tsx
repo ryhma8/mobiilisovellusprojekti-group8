@@ -63,6 +63,7 @@ async function luoProfiili()
 
                     <TextInput
                     value={ikä}
+                    keyboardType="numeric"
                     onChangeText={setikä}
                     style= {styles.textinput}
                     placeholder='Ikä:'>
@@ -70,6 +71,7 @@ async function luoProfiili()
 
                     <TextInput
                     value={paino}
+                    keyboardType="numeric"
                     onChangeText={setPaino}
                     style= {styles.textinput}
                     placeholder='Paino:'>    
@@ -77,6 +79,7 @@ async function luoProfiili()
 
                     <TextInput
                     value={pituus}
+                    keyboardType="numeric"
                     onChangeText={setPituus}
                     style= {styles.textinput}
                     placeholder='Pituus:'>
@@ -131,7 +134,8 @@ const styles = StyleSheet.create({
   {
     backgroundColor: '#ffffff',
     borderRadius: 10,
-    width: width/1.4
+    width: width/1.4,
+    color: "#000000"
   },
   container: 
   {
