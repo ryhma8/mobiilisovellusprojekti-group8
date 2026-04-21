@@ -4,6 +4,7 @@ import {useFont } from "@shopify/react-native-skia";
 import { chartProps } from "../types/ChartProps";
 import { WeightAndJogdata } from "../types/JogData";
 import { useEffect, useState } from "react";
+import { laskeJuoksujenAvgMatka } from "../mathFunctions/functions";
 
 const { width, height } = Dimensions.get("window");
 
@@ -15,6 +16,7 @@ export function MyChart({DataArr, Karttamoodi}: chartProps) {
   const kumulatiivinenLenkkiMatka = laskekumulatiivinenLenkkienMatka()
   const kumulatiivinenLKalorit = laskekumulatiivinenKalorit()
   const kumulatiivinenLAika = laskekumulatiivinenAika()
+  const lenkkienAvgMatka = laskeJuoksujenAverageMatka()
 
   const inter = require("../roboto.ttf"); 
   const fontti = useFont(inter, 12)  
@@ -76,7 +78,8 @@ else if(Karttamoodi == "pituusAvg")
         )}
       </CartesianChart>
       <View>
-        <Text>7vrk lenkkien pituus yhteensä: {kumulatiivinenLenkkiMatka} km</Text>
+        <Text>7 kerran lenkkien pituus yhteensä: {kumulatiivinenLenkkiMatka} km</Text>
+        <Text>7 kerran lenkkien  pituus keskiarvo: {lenkkienAvgMatka.toFixed(2)} km</Text>
       </View>
     </View>
   );
@@ -106,7 +109,7 @@ else if(Karttamoodi == "lenkkiAika")
         )}
       </CartesianChart>
       <View>
-        <Text>7vrk lenkkien aika yhteensä: {kumulatiivinenLAika} minuuttia</Text>
+        <Text>7 kerran lenkkien aika yhteensä: {kumulatiivinenLAika} minuuttia</Text>
       </View>
     </View>
   );
@@ -136,7 +139,7 @@ else if(Karttamoodi == "lenkkiCal")
         )}
       </CartesianChart>
       <View>
-        <Text>7vrk poltetut kalorit: {kumulatiivinenLKalorit} kcal</Text>
+        <Text>7 kerran poltetut kalorit: {kumulatiivinenLKalorit} kcal</Text>
       </View>
     </View>
   );
@@ -177,6 +180,18 @@ else if(Karttamoodi == "lenkkiCal")
     }
   }
 
+  function laskeJuoksujenAverageMatka():number
+  {
+    if(DataArr == undefined || DataArr.length == 0) return 0
+
+    let lenkkienAvg:number[] = []
+    for (let i = 0; i < DataArr.length; i++)
+      {
+        console.log("loop " + DataArr[i].length_Km)
+        lenkkienAvg[i] = Number(DataArr[i].length_Km)
+      }
+    return laskeJuoksujenAvgMatka(lenkkienAvg)
+  }
 
    function laskePainonmuutos()
   {

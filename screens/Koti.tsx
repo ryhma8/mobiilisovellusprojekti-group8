@@ -93,7 +93,7 @@ export function Koti() {
                           <View style={styles.flexSingle}>
                               
                               <View style={styles.textRow}>
-                                <Text  style= {styles.textName}> {Jogdata[0]?.Jog_Date}, {Jogdata[0]?.length_Km} km  </Text>
+                                <Text  style= {styles.textName}> {Jogdata[0]?.Jog_Date}, {Jogdata[0]?.length_Km.toFixed(2)} km  </Text>
                               </View>
 
                               <View style={styles.textRow}>

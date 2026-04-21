@@ -40,10 +40,13 @@ export function laskeJuoksujenAvgMatka(juoksut:number[]):number // ottaa paramet
         {
             kumulatiivinenMatka += juoksut[iteraatiot]
 
-            avgMatkaKilometrit = (kumulatiivinenMatka / iteraatiot)
-            console.log(kumulatiivinenMatka)
+            avgMatkaKilometrit = (kumulatiivinenMatka / (iteraatiot+1))
+                
+            console.log("kumulatiivinen matka " + kumulatiivinenMatka + " " + "iteraatiot " + (iteraatiot+1))
+            console.log("juoksu iteraatio "+juoksut[iteraatiot])
         }
-        return Number(avgMatkaKilometrit.toFixed(2)) //palautetaan matka kilometreinä
+        console.log("avgmatkat" + avgMatkaKilometrit)
+        return Number(avgMatkaKilometrit) //palautetaan matka kilometreinä
 }
 
 export function LaskeMatkaKoordinaateista(coordArr: coordType[]):number
