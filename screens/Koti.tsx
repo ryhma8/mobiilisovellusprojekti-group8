@@ -17,7 +17,7 @@ export function Koti() {
 
   const db = useSQLiteContext(); //ladataan database
 
-  const [paino, setPaino] = useState<string>("")
+  const [paino, setPaino] = useState<string | null>(null)
   const [NewestWeight, setNewestWeight] = useState<WeightAndJogdata[]>([])
   const [userData, setUserData] = useState<UserData[]>([])
   const [UserWeight, setUserWeight] = useState<WeightAndJogdata[]>([])
@@ -27,12 +27,13 @@ export function Koti() {
 
   async function setValues()
     {
-      if(paino != null && paino != undefined)
+      if(paino != null && paino != undefined && paino.length > 0)
       {
         try 
         {
           console.log("anw called", paino)
             await AddNewWeight(Number(paino), db)
+            setInfogiven(true)
         } catch (error) 
         {
           alert("tietokantavirhe") 
@@ -46,7 +47,10 @@ export function Koti() {
 
    if(Infogiven)
       {
+        console.log("info is given!")
         loadUserData(db, setUserData, setUserWeight, setJogData)
+        loadNewestWeight(db, setNewestWeight)
+        setPaino(null)
         setInfogiven(false)
       }
 

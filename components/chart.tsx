@@ -27,7 +27,6 @@ export function MyChart({DataArr, Karttamoodi}: chartProps) {
       <CartesianChart
         data={DataArr.toReversed()} 
         xKey="Date"
-        domain={{x: [1, 7]}} 
         yKeys={["Weight_Kg"]}    
         domainPadding={{top: 30, bottom: 30}}
         axisOptions={{

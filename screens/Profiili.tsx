@@ -1,5 +1,5 @@
 import React, { use, useEffect, useState } from 'react';
-import {View, Text, Button, StyleSheet, Dimensions, Pressable} from 'react-native';
+import {View, Text, Button, StyleSheet, Dimensions, Pressable, Image} from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
@@ -86,8 +86,14 @@ if (userData.length > 0) return (
       <View style={styles.container}>
 
       <View style={styles.textarea}>
+
+        <Image
+         source={require('../assets/person-svgrepo-com.png')}
+        style={styles.image}>
+        </Image>
+        
                           <View style={styles.flexMaster}>
-          
+                          
                           <View style={styles.flexSingle}>
                               <View style={styles.textRow}>
                                 <Text  style= {styles.text}> Nimi: </Text>
@@ -190,6 +196,11 @@ if (userData.length > 0) return (
 
 
 const styles = StyleSheet.create({
+image:
+    {
+    width: width/5,
+    height: height/10
+    },
 container: 
 {
   flex: 1,
@@ -242,7 +253,6 @@ textName:
   },
   flexMaster: 
   {
-    margin: width/15,
     gap: width/15,
     flexDirection: 'row'
   },

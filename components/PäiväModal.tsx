@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { Modal, StyleSheet, Text, Pressable, View, Dimensions, TextInput, Button, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
 import { LiikeModal } from './LiikeModal';
 import { PäiväModalProps } from '../types/ModalProps';
@@ -89,7 +89,16 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 
     return (
         <View>
-
+                    <View style={styles.containerRow}>
+                        <Image
+                      source={require('../assets/gym-svgrepo-com.png')}
+                      style={styles.image}>
+                      </Image>
+                      <Image
+                      source={require('../assets/barbell-and-plates-svgrepo-com.png')}
+                      style={styles.image}>
+                      </Image>
+                    </View>
             <TouchableOpacity style={styles.päivärivi}
                 onPress={() => [setModalVisiblepv(true), setSelectedDay(1),setRefresh(true)]}>
 
@@ -235,6 +244,19 @@ export function PäiväModal({ modalVisiblepv, setModalVisiblepv }: PäiväModal
 }
 
 const styles = StyleSheet.create({
+    containerRow: 
+    {
+    margin: height/40,
+    gap: 30,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
+    },
+    image:
+    {
+    width: width/5,
+    height: height/10
+    },
     modalNappi: {
         backgroundColor: '#fc8bd2ff',
         padding: 5,
