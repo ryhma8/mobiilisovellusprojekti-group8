@@ -112,7 +112,7 @@ startTrackingButton.onAdd = function () {
   const div = L.DomUtil.create("div", "leaflet-bar leaflet-control");
 
   div.style.backgroundColor = "white";
-  div.style.padding = "6px 30px"; 
+  div.style.padding = "6px 35px"; 
   div.style.width = "30px";
   div.style.height = "30px";
   div.style.cursor = "pointer";

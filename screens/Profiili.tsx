@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from 'react';
 import {View, Text, Button, StyleSheet, Dimensions, Pressable, Image} from 'react-native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { NativeStackScreenProps, NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types/navigation'
 import { ProfiiliValikkoModal } from '../components/ProfiiliModal';
 import { loadNewestWeight, loadUserData, purgeDb } from '../Database/Database';
@@ -10,6 +10,8 @@ import { ChartsModal } from '../components/ChartsModal';
 import { useSQLiteContext } from 'expo-sqlite';
 import { WeightAndJogdata } from '../types/JogData';
 import { Karttamoodi } from '../types/karttamoodiEnum';
+import { useNavigation } from '@react-navigation/native';
+
 
 const { width, height } = Dimensions.get("window");
 
@@ -29,6 +31,8 @@ const sivut = [
 export function Profiili({ route }: Props) {
 
   const db = useSQLiteContext(); //ladataan database konstekstista
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
 
    useEffect(() => {
           loadUserData(db, setUserData, setUserWeight, setJogData) //(uus versio) useeffectilla ladataan db:stä tiedot mitä halutaan
@@ -173,7 +177,17 @@ if (userData.length > 0) return (
          style= {styles.Pressable} 
           onPress={() => asetaLenkkiAikaChartiin()}>
           <Text style={styles.textClose}>lenkkien ajat</Text>
-        </Pressable>    
+        </Pressable>   
+          
+      </View>  
+      
+      <View style={styles.PressableContainer}>
+        <Pressable
+         style= {styles.Pressable2} 
+          onPress={() => navigation.navigate("Historia")}>
+          <Text style={styles.textPressable}>lenkkien historia</Text>
+        </Pressable>
+ 
       </View>  
                      
           </View>
@@ -292,7 +306,7 @@ textName:
     flexDirection: 'column',
     alignContent: 'center',
     alignItems: 'center',
-    height: height/1.5
+    height: height/1.4
   },
   textClose: 
   {

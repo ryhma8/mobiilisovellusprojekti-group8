@@ -36,6 +36,7 @@ export function Kartta() {
     const [trackedJog, setTrackedJog] = useState<coordInterface[]>([]);
     const [databaseCoords, setDatabaseCoords] = useState<coords[]>([])
     const [distance, setDistance] = useState<number>(0);
+    const [finalDistance, setFinalDistance] = useState<number>(0);
     const [fromStartAvgSpd, setFromStartAvgSpd] = useState<number>(0);
     const [avgSpd, setAvgSpd] = useState<number>(0);
     const [fromStartMsToKm, setFromStartMsToKm] = useState<number>(0);
@@ -206,6 +207,8 @@ export function Kartta() {
             setTrackedJog(coordList);
             setDatabaseCoords(coordsForDb);
 
+            setFinalDistance(LaskeMatkaKoordinaateista(coordList.map(c => c.coords)));
+
             setShowStats(true);
 
             setTimeout(() => {
@@ -283,14 +286,14 @@ export function Kartta() {
                             />
                         </View>
 
-                        <Text style={styles.statCardText}>Matka: {distance.toFixed(2)} km</Text>
-                        <Text style={styles.statCardText}>Keskinopeus (kokonais): {fromStartMsToKm.toFixed(2)} km/h</Text>
+                        <Text style={styles.statCardText}>Matka: {finalDistance.toFixed(2)} km</Text>
+                        <Text style={styles.statCardText}>Keskinopeus: {fromStartMsToKm.toFixed(2)} km/h</Text>
                         <Text style={styles.statCardText}>Aika: {formatTime(trackedJog.at(-1)?.time ?? 0)}</Text>
                         <Text style={styles.statCardText}>Kaloreita kulutettu: {calories.toFixed(0)}</Text>
 
                         <View style={{ flexDirection:"row", justifyContent: "space-between", width: "100%", }}>
                             <Pressable
-                                onPress={() => {AddNewJog(fromStartMsToKm, calories, distance, trackedJog.at(-1)?.time ?? 0, JSON.stringify(databaseCoords) ,db) 
+                                onPress={() => {AddNewJog(fromStartMsToKm, calories, finalDistance, trackedJog.at(-1)?.time ?? 0, JSON.stringify(databaseCoords) ,db) 
                                                 setShowStats(false)  
                                 }}
                                 style={styles.statcardButton}
@@ -315,22 +318,28 @@ export function Kartta() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#9F6BFB',
     },
     numberContainer: {
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 10,
+        marginRight: 10,
+        borderRadius: 5,
         backgroundColor: '#fff',
     },
     numberContainerBottom: {
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 10,
+        marginRight: 10,
+        borderRadius: 5,
         backgroundColor: '#fff',
     },
     teksti: {
-        fontSize: 30
+        fontSize: 30,
+        marginLeft: 5,
+        marginRight: 5,
     },
     modalContainer: {
         flex: 1,
