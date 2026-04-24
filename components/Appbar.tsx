@@ -3,6 +3,7 @@ import { NativeStackHeaderProps } from '@react-navigation/native-stack'
 import { Dropdown } from 'react-native-element-dropdown';
 import { Dimensions, View, StyleSheet, Text } from 'react-native';
 import { horizontalScale } from '../mathFunctions/FonttiSkaalaaja';
+import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
 
 type Props = NativeStackHeaderProps
@@ -46,16 +47,19 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     alignItems: 'center',
     gap: width/50,
-    margin: width/50,
+    backgroundColor: '#9F6BFB',
     flexDirection: 'row'
   },
   navBox: 
   {
-    margin: 1,
     width: width/3,
     height: height/20,
+    marginLeft: width/30,
+    marginTop: width/30,
     backgroundColor: '#9F6BFB',
     borderRadius: 15,
+    borderWidth: 1,
+    borderColor: '#ffffff'
   },
   text:
   {

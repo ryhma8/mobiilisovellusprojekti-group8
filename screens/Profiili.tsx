@@ -245,19 +245,13 @@ textPressable:
   },
 Pressable2: 
   {
+    marginBottom: width/20,
     borderRadius: 10,
     height: height/20,
     width: width/3,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9F6BFB',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 2,
-    elevation: 5,
+    backgroundColor: '#9F6BFB'
   },
 chart: {
     flex: 1

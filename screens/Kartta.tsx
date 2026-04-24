@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useCallback, useState } from 'react';
-import { View, StyleSheet, Text, Pressable, Modal } from 'react-native';
+import { View, StyleSheet, Text, Pressable, Modal, Dimensions } from 'react-native';
 import { WebView } from 'react-native-webview';
 import * as Location from 'expo-location';
 import { leafletHtml } from '../components/leaflet';
@@ -19,6 +19,8 @@ interface coords {
     lat: number;
     lng: number;
 }
+
+const { width, height } = Dimensions.get("window");
 
 export function Kartta() {
 
@@ -321,25 +323,25 @@ const styles = StyleSheet.create({
         backgroundColor: '#9F6BFB',
     },
     numberContainer: {
-        marginTop: 10,
-        marginBottom: 10,
-        marginLeft: 10,
-        marginRight: 10,
+        marginTop: width/30,
+        marginBottom: width/30,
+        marginLeft: width/30,
+        marginRight: width/30,
         borderRadius: 5,
         backgroundColor: '#fff',
     },
     numberContainerBottom: {
-        marginTop: 10,
-        marginBottom: 10,
-        marginLeft: 10,
-        marginRight: 10,
+        marginTop: width/30,
+        marginBottom: width/30,
+        marginLeft: width/30,
+        marginRight: width/30,
         borderRadius: 5,
         backgroundColor: '#fff',
     },
     teksti: {
         fontSize: 30,
-        marginLeft: 5,
-        marginRight: 5,
+        marginLeft: width/60,
+        marginRight: width/60,
     },
     modalContainer: {
         flex: 1,
@@ -356,7 +358,7 @@ const styles = StyleSheet.create({
     statcardTitle: {
         fontSize: 24,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: width/20,
     },
     statcardButton: {
         marginTop: 20,
