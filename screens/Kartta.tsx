@@ -148,6 +148,7 @@ export function Kartta() {
     const sendLocationToWebView = useCallback(async () => {
         try {
             const position = await Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.BestForNavigation
             });
 
             const coords = {
